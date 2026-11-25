@@ -1,6 +1,8 @@
-G SPOT TRACKER
-
-Standalone browser-based cycle and pregnancy health tracker.
+G SPOT: Guided System for Pregnancy, Obstetric and Tracking
+Many expectant mothers, especially first-time moms, keep track of their pregnancy using
+notebooks, phone notes, or scattered reminders. Important details such as checkup dates,
+symptoms, weight changes, and baby movements are easily forgotten or lost, and mothers
+often feel unsure whether what they experience is normal.
 
 PROJECT STRUCTURE
 - DATABASE/  Reserved for database scripts and schemas.
