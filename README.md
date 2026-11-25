@@ -88,12 +88,5 @@ The following member details and task assignments are based on the OOP 101 proje
  GitHub Repository
 
 Repository:** [G-SPOT](https://github.com/25-08416-cell/G-SPOT.git)
-
- Health and Safety Notice
-
-G SPOT is intended for organization and general pregnancy tracking. Health alerts are based on simple preset rules and are not clinical analysis. Users should contact their healthcare provider for medical concerns, unusual symptoms, or questions about their pregnancy.
----
-
-**Project:** G SPOT – Guided System for Pregnancy, Obstetric & Tracking  
-**Course:** OOP 101 – Object-Oriented Programming  
+ ng  
 **Team:** DREAM TEAM | Team 2 | BSIT 2106
