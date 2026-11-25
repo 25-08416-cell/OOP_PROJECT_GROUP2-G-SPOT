@@ -1,0 +1,1725 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>G SPOT Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: landing and auth pages are centered single screens; the signed-in app is a navy sidebar plus a card grid that collapses to a top bar and one column on phones. */
+:root {
+  --bg: #F7F4FB;
+  --surface: #FFFFFF;
+  --soft: #F4F0FA;
+  --ink: #25214A;
+  --muted: #6B6890;
+  --line: #E9E4F3;
+  --navy: #26224C;
+  --navy-muted: #B9B5DA;
+  --pink: #D1346F;
+  --on-pink: #FFFFFF;
+  --pink-text: #D1346F;
+  --pink-soft: #FDE9F2;
+  --violet: #7A4FD0;
+  --teal: #1B9A86;
+  --mint: #E0F5EE;
+  --mint-ink: #17745A;
+  --amber-bg: #FFF3D9;
+  --amber-ink: #86560A;
+  --red-bg: #FDE6EA;
+  --red-ink: #B3213F;
+  --g1: #F6BCD7;
+  --g2: #D0BCF3;
+  --g3: #B9EBDD;
+  --gc1: #D93B79;
+  --gc2: #7A4FD0;
+  --float: #FFFFFF;
+  --shadow: 0 1px 2px rgba(38,34,76,.05), 0 10px 28px -14px rgba(38,34,76,.2);
+  --font-display: 'Plus Jakarta Sans', 'Avenir Next', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14112B; --surface: #1E1A3D; --soft: #28234D; --ink: #F2EEFF; --muted: #AAA5CF; --line: #35305E;
+    --navy: #0E0B24; --navy-muted: #A9A4CC;
+    --pink: #FF7DAE; --on-pink: #1B1033; --pink-text: #FF8DB7; --pink-soft: #3A1F3F;
+    --violet: #A98BF0; --teal: #4FD0B8;
+    --mint: #153A33; --mint-ink: #6FE0B8; --amber-bg: #3C2E10; --amber-ink: #F2C56B; --red-bg: #46182A; --red-ink: #FF9AB0;
+    --g1: #8C3C6A; --g2: #5A3F99; --g3: #2B6F66; --gc1: #C2306B; --gc2: #5F3DB4;
+    --float: #272250; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 30px -14px rgba(0,0,0,.6);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14112B; --surface: #1E1A3D; --soft: #28234D; --ink: #F2EEFF; --muted: #AAA5CF; --line: #35305E;
+  --navy: #0E0B24; --navy-muted: #A9A4CC;
+  --pink: #FF7DAE; --on-pink: #1B1033; --pink-text: #FF8DB7; --pink-soft: #3A1F3F;
+  --violet: #A98BF0; --teal: #4FD0B8;
+  --mint: #153A33; --mint-ink: #6FE0B8; --amber-bg: #3C2E10; --amber-ink: #F2C56B; --red-bg: #46182A; --red-ink: #FF9AB0;
+  --g1: #8C3C6A; --g2: #5A3F99; --g3: #2B6F66; --gc1: #C2306B; --gc2: #5F3DB4;
+  --float: #272250; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 30px -14px rgba(0,0,0,.6);
+  color-scheme: dark;
+}
+
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+*, *::before, *::after { box-sizing: border-box; }
+#root { min-height: 100%; display: flex; flex-direction: column; }
+#root > * { flex: 1 0 auto; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+button:disabled { cursor: not-allowed; opacity: .55; }
+:focus-visible { outline: 2px solid var(--pink-text); outline-offset: 2px; }
+h1, h2, h3, p { margin: 0; }
+h1 { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -0.01em; line-height: 1.2; }
+h3 { font-weight: 700; font-size: 15px; }
+.muted { color: var(--muted); }
+.cap { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+.logo { font-family: var(--font-display); font-weight: 800; letter-spacing: .02em; }
+
+/* buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; font-size: 14px; padding: 11px 18px; border-radius: 10px; white-space: nowrap; }
+.btn.pink { background: var(--pink); color: var(--on-pink); }
+.btn.pill { border-radius: 999px; padding: 13px 24px; }
+.btn.navy { background: var(--navy); color: #fff; }
+.btn.line { border: 1.5px solid var(--ink); color: var(--ink); background: transparent; }
+.btn.soft { background: var(--soft); color: var(--ink); }
+.btn:hover:not(:disabled) { filter: brightness(1.06); }
+.btn.block { width: 100%; }
+.link { color: var(--pink-text); font-weight: 700; font-size: 13px; }
+.link.del { color: var(--red-ink); }
+.link:hover { text-decoration: underline; }
+
+/* forms */
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field label, .field .lbl { font-size: 13px; font-weight: 700; }
+input:not([type="radio"]):not([type="checkbox"]), select, textarea {
+  font: inherit; color: var(--ink); background: var(--surface); border: 1.5px solid var(--line); border-radius: 10px; padding: 11px 13px; width: 100%; min-width: 0;
+}
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--pink-text); outline-offset: 1px; border-color: transparent; }
+input.invalid, select.invalid { border-color: var(--red-ink); }
+.err { background: var(--red-bg); color: var(--red-ink); font-size: 13px; font-weight: 600; padding: 8px 12px; border-radius: 8px; }
+.form { display: flex; flex-direction: column; gap: 14px; }
+.hint { font-size: 12.5px; color: var(--muted); }
+
+/* cards */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); min-width: 0; }
+.grad { background: linear-gradient(120deg, var(--gc1), var(--gc2)); color: #fff; border: 0; }
+.grad .cap { opacity: .85; }
+
+/* ---------- landing ---------- */
+.land { background: var(--surface); min-height: 100%; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 32px); }
+.l-nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 22px; }
+.l-nav .logo { font-size: 20px; }
+.l-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 28px); font-weight: 600; font-size: 14px; }
+.l-links .plain:hover { color: var(--pink-text); }
+.l-links .btn { padding: 10px 20px; }
+@media (max-width: 560px) { .l-links .hide-s { display: none; } }
+.hero { display: grid; gap: 36px; align-items: center; padding-block: 28px 32px; }
+@media (min-width: 900px) { .hero { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 56px; } }
+.badge { display: inline-block; padding: 6px 12px; border-radius: 999px; background: var(--pink-soft); color: var(--pink-text); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.hero h1 { font-size: clamp(36px, 5.4vw, 58px); margin-top: 18px; }
+.hero h1 em { font-style: normal; color: var(--pink-text); }
+.lede { margin-top: 18px; max-width: 46ch; color: var(--muted); font-size: 16px; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+.hero-panel { border-radius: 28px; min-height: 340px; padding: clamp(18px, 4vw, 32px); background: linear-gradient(135deg, var(--g1) 0%, var(--g2) 55%, var(--g3) 100%); display: flex; flex-direction: column; justify-content: center; gap: 16px; }
+.float { background: var(--float); border-radius: 14px; padding: 16px 18px; box-shadow: 0 14px 30px -16px rgba(38,34,76,.45); }
+.float .cap, .float .big, .float .sm { display: block; }
+.float .cap { margin-bottom: 4px; }
+.float .big { font-family: var(--font-display); font-weight: 800; font-size: 28px; line-height: 1.1; }
+.float .sm { font-size: 13px; color: var(--muted); }
+.f1 { width: min(78%, 300px); }
+.f2 { width: min(66%, 260px); align-self: flex-end; }
+.f2 .big { font-size: 20px; }
+.f3 { width: min(68%, 270px); background: var(--navy); color: #fff; }
+.f3 .big { font-size: 18px; }
+.bar { height: 6px; border-radius: 4px; background: var(--line); margin-top: 10px; overflow: hidden; }
+.bar i { display: block; height: 100%; border-radius: 4px; background: var(--pink); }
+.feats { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; padding-block: 8px 44px; }
+.feat { border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; background: var(--surface); }
+.feat p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.how { padding-block: 24px 48px; border-top: 1px solid var(--line); }
+.how h2 { font-size: clamp(24px, 3vw, 32px); font-weight: 800; }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin-top: 22px; }
+.step { background: var(--soft); border-radius: 16px; padding: 20px; }
+.step .n { width: 34px; height: 34px; border-radius: 50%; background: var(--pink); color: var(--on-pink); display: grid; place-items: center; font-weight: 800; margin-bottom: 12px; }
+.step p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+.foot { padding-block: 22px 40px; color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--line); max-width: 80ch; }
+
+/* ---------- auth ---------- */
+.auth { min-height: 100%; display: grid; place-items: center; padding: clamp(16px, 4vw, 32px); }
+.auth-card { width: min(940px, 100%); background: var(--surface); border-radius: 24px; overflow: hidden; box-shadow: var(--shadow); display: grid; border: 1px solid var(--line); }
+@media (min-width: 780px) { .auth-card { grid-template-columns: 1fr 1fr; min-height: 520px; } }
+.auth-art { background: linear-gradient(150deg, var(--g1) 0%, var(--g2) 55%, var(--g3) 100%); padding: clamp(22px, 4vw, 40px); display: flex; flex-direction: column; justify-content: space-between; gap: 24px; min-height: 220px; color: #26224C; }
+.auth-art .logo { font-size: 20px; }
+.auth-art h1 { font-size: clamp(28px, 4vw, 38px); }
+.auth-art p { margin-top: 10px; max-width: 32ch; font-size: 14px; }
+.auth-form { padding: clamp(22px, 4vw, 44px); display: flex; flex-direction: column; justify-content: center; gap: 14px; min-width: 0; }
+.auth-form h2 { font-size: 24px; font-weight: 800; }
+.demo-box { background: var(--soft); border-radius: 12px; padding: 12px 14px; font-size: 13px; display: flex; flex-direction: column; gap: 8px; }
+.roles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.role { position: relative; }
+.role input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+.role span { display: block; border: 1.5px solid var(--line); border-radius: 12px; padding: 12px; font-weight: 700; font-size: 13.5px; text-align: center; }
+.role input:checked + span { border-color: var(--pink-text); background: var(--pink-soft); color: var(--pink-text); }
+.role input:focus-visible + span { outline: 2px solid var(--pink-text); outline-offset: 2px; }
+
+/* ---------- app shell ---------- */
+.shell { display: grid; grid-template-columns: minmax(0, 1fr); min-height: 100%; }
+.side { background: var(--navy); color: #fff; padding: 16px; display: grid; grid-template-areas: 'brand out' 'nav nav'; grid-template-columns: 1fr auto; align-items: center; gap: 14px 12px; min-width: 0; }
+.brand-btn { grid-area: brand; text-align: left; display: flex; flex-direction: column; gap: 2px; }
+.brand-btn .logo { font-size: 20px; color: #fff; }
+.brand-btn .sub { font-size: 12px; color: var(--navy-muted); }
+.logout { grid-area: out; color: var(--navy-muted); font-weight: 600; font-size: 13px; padding: 8px 10px; border-radius: 8px; }
+.logout:hover { color: #fff; background: rgba(255,255,255,.08); }
+.snav { grid-area: nav; display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+.snav button { padding: 10px 14px; border-radius: 10px; font-weight: 600; font-size: 14px; color: rgba(255,255,255,.8); white-space: nowrap; text-align: left; }
+.snav button:hover { background: rgba(255,255,255,.08); }
+.snav button[aria-current="page"] { background: var(--pink); color: var(--on-pink); }
+@media (min-width: 900px) {
+  .shell { grid-template-columns: 232px minmax(0, 1fr); }
+  .side { display: flex; flex-direction: column; align-items: stretch; gap: 22px; padding: 24px 16px; }
+  .brand-btn { order: 1; }
+  .snav { order: 2; flex-direction: column; overflow: visible; }
+  .logout { order: 3; margin-top: auto; text-align: left; }
+}
+.main { padding: 22px clamp(16px, 3vw, 36px) 56px; display: flex; flex-direction: column; gap: 18px; min-width: 0; max-width: 1120px; width: 100%; }
+.pagehead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; }
+.pagehead h1 { font-size: clamp(24px, 3vw, 30px); }
+.pagehead .sub { color: var(--muted); margin-top: 4px; }
+.sample { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 10px 14px; border-radius: 12px; background: var(--amber-bg); color: var(--amber-ink); font-size: 13.5px; font-weight: 600; }
+.sample span { flex: 1 1 240px; min-width: 0; }
+.sample .link { color: var(--amber-ink); text-decoration: underline; }
+
+.dgrid { display: grid; gap: 16px; }
+.dgrid > * { min-width: 0; }
+@media (min-width: 900px) { .dgrid { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); } }
+.prog h2, .prog .wk { color: #fff; }
+.wkrow { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; margin-top: 6px; }
+.wk { font-family: var(--font-display); font-weight: 800; font-size: clamp(36px, 5vw, 46px); line-height: 1.05; letter-spacing: -0.02em; }
+.tri { font-weight: 700; font-size: 15px; opacity: .92; }
+.prog .due { margin-top: 12px; font-weight: 600; font-size: 14px; }
+.prog .bar { background: rgba(255,255,255,.3); height: 8px; margin-top: 14px; }
+.prog .bar i { background: #fff; }
+.prog .size { margin-top: 10px; font-size: 14px; font-weight: 600; opacity: .95; }
+.appt-next h2 { font-size: 22px; font-weight: 800; margin-top: 6px; }
+.appt-next .when { margin-top: 4px; font-weight: 600; font-size: 14px; }
+.appt-next .rem { margin-top: 10px; color: var(--muted); font-size: 13.5px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); gap: 10px; margin-top: 14px; }
+.tile { background: var(--soft); border-radius: 12px; padding: 12px; }
+.tile .l { font-size: 12px; color: var(--muted); font-weight: 600; }
+.tile .v { font-family: var(--font-display); font-weight: 800; font-size: 18px; line-height: 1.2; margin-top: 2px; }
+.tile .d { font-size: 11.5px; color: var(--muted); }
+.mini-list { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; }
+.mini-list li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.mini-list li span:last-child { color: var(--muted); white-space: nowrap; }
+.mini-list li span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.acard.ok { background: var(--mint); border-color: transparent; }
+.acard.ok .cap { color: var(--mint-ink); }
+.acard.watch { background: var(--amber-bg); border-color: transparent; }
+.acard.watch .cap { color: var(--amber-ink); }
+.acard.urgent { background: var(--red-bg); border-color: transparent; }
+.acard.urgent .cap { color: var(--red-ink); }
+.acard h2 { font-size: 20px; font-weight: 800; margin-top: 6px; }
+.acard p { margin-top: 6px; font-size: 14px; }
+.acard .link { display: inline-block; margin-top: 10px; }
+
+/* logs */
+.lgrid { display: grid; gap: 16px; }
+.lgrid > * { min-width: 0; }
+@media (min-width: 900px) { .lgrid { grid-template-columns: minmax(0, .85fr) minmax(0, 1.5fr); align-items: start; } }
+.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-top: 12px; }
+.chips button { padding: 7px 14px; border-radius: 999px; background: var(--soft); font-weight: 700; font-size: 13px; white-space: nowrap; }
+.chips button[aria-pressed="true"] { background: var(--pink); color: var(--on-pink); }
+.tscroll { overflow-x: auto; margin-top: 8px; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 400px; }
+.tbl th { text-align: left; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding: 10px 8px; }
+.tbl td { padding: 11px 8px; border-top: 1px solid var(--line); vertical-align: top; }
+.tbl td:nth-child(2) { font-weight: 700; }
+.tbl td:nth-child(3) { overflow-wrap: anywhere; }
+.tbl td:last-child { text-align: right; }
+.empty { color: var(--muted); padding: 18px 0 6px; }
+.formgrid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.addgrid { display: grid; gap: 16px; }
+.addgrid > * { min-width: 0; }
+@media (min-width: 900px) { .addgrid { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); align-items: stretch; } }
+.sidepanel { border-radius: 16px; padding: 28px; background: linear-gradient(150deg, var(--g1) 0%, var(--g2) 55%, var(--g3) 100%); color: #26224C; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+.sidepanel h2 { font-size: 22px; font-weight: 800; }
+
+/* appointments */
+.alist { display: flex; flex-direction: column; gap: 12px; }
+.appt { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: var(--shadow); }
+.appt.past { opacity: .65; box-shadow: none; }
+.dbadge { width: 56px; height: 56px; border-radius: 14px; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 800; line-height: 1.05; flex: none; background: var(--c); }
+.dbadge small { font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.dbadge b { font-size: 20px; }
+.c0 { --c: #D1346F; } .c1 { --c: #7A4FD0; } .c2 { --c: #168A78; }
+.ainfo { flex: 1 1 200px; min-width: 0; }
+.ainfo h3 { font-size: 15px; }
+.ainfo p { color: var(--muted); font-size: 13.5px; overflow-wrap: anywhere; }
+.aact { display: flex; gap: 16px; }
+.resched { flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+.resched .field { flex: 1 1 150px; }
+
+/* tips */
+.wtabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.wtabs button { padding: 9px 18px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-weight: 700; font-size: 14px; white-space: nowrap; }
+.wtabs button[aria-pressed="true"] { background: var(--pink); color: var(--on-pink); border-color: var(--pink); }
+.tgrid { display: grid; gap: 16px; }
+.tgrid > * { min-width: 0; }
+@media (min-width: 900px) { .tgrid { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); } }
+.tgrad .big { font-family: var(--font-display); font-weight: 800; font-size: clamp(30px, 4.4vw, 40px); line-height: 1.1; margin-top: 6px; text-transform: capitalize; }
+.tgrad p { margin-top: 10px; font-size: 14.5px; }
+.tgrad .meta { font-size: 13px; font-weight: 700; opacity: .9; }
+.ul { margin: 12px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.ul li { position: relative; padding-left: 18px; font-size: 14.5px; }
+.ul li::before { content: ''; position: absolute; left: 0; top: .6em; width: 7px; height: 7px; border-radius: 50%; background: var(--pink); }
+.mint { background: var(--mint); border-color: transparent; }
+.mint h3 { color: var(--mint-ink); }
+
+/* alerts page */
+.arow { display: flex; gap: 12px; padding: 14px 16px; border-radius: 12px; }
+.arow.urgent { background: var(--red-bg); color: var(--red-ink); }
+.arow.watch { background: var(--amber-bg); color: var(--amber-ink); }
+.arow.info { background: var(--soft); }
+.arow h3 { font-size: 15px; }
+.arow p { font-size: 14px; margin-top: 2px; }
+
+/* profile */
+.pgrid { display: grid; gap: 16px; }
+.pgrid > * { min-width: 0; }
+@media (min-width: 900px) { .pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; } }
+.kv { display: flex; flex-direction: column; margin-top: 8px; }
+.kv > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 14px; padding: 11px 0; border-top: 1px solid var(--line); }
+.kv > div:first-child { border-top: 0; }
+.kv dt { color: var(--muted); font-size: 13px; font-weight: 600; }
+.kv dd { margin: 0; font-weight: 700; text-align: right; overflow-wrap: anywhere; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+/* family */
+.ftop { background: var(--navy); color: #fff; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; padding: 16px clamp(16px, 4vw, 36px); }
+.ftop .logo { font-size: 20px; }
+.vbadge { margin-left: auto; padding: 6px 14px; border-radius: 999px; background: var(--mint); color: var(--mint-ink); font-size: 12.5px; font-weight: 700; }
+.ftop .logout { margin: 0; }
+.fmain { max-width: 960px; margin: 0 auto; padding: 28px clamp(16px, 4vw, 32px) 56px; display: flex; flex-direction: column; gap: 18px; }
+.fmain h1 { font-size: clamp(24px, 3.4vw, 32px); }
+.fgrid { display: grid; gap: 16px; }
+.fgrid > * { min-width: 0; }
+@media (min-width: 760px) { .fgrid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); } }
+.fgrad .big { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 4vw, 38px); line-height: 1.1; margin-top: 6px; text-transform: capitalize; }
+.fgrad p { margin-top: 10px; font-size: 14.5px; }
+.note { color: var(--muted); font-size: 13.5px; }
+
+/* toast */
+#toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 80; background: var(--navy); color: #fff; padding: 11px 16px; border-radius: 12px; display: flex; align-items: center; gap: 14px; font-size: 14px; font-weight: 600; box-shadow: 0 12px 30px -10px rgba(0,0,0,.5); max-width: calc(100vw - 32px); }
+#toast button { color: #FFB3D0; font-weight: 800; }
+
+/* splash */
+#splash {
+  position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 24px; cursor: pointer;
+  background: radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--g2) 40%, var(--bg)), var(--bg) 66%);
+  animation: spOut .6s ease 5.5s forwards;
+}
+#splash.out { animation: spOut .6s ease forwards; }
+@keyframes spOut { to { opacity: 0; transform: scale(1.04); visibility: hidden; } }
+.sp-inner { display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
+.sp-art { width: min(200px, 52vw); height: auto; display: block; overflow: visible; }
+.sp-ring { fill: none; stroke: url(#spGrad); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 452 452; animation: spRing 1.5s cubic-bezier(.4,.1,.2,1) .1s both; }
+@keyframes spRing { from { stroke-dasharray: 0 452; } }
+.sp-bg { fill: var(--soft); }
+.sp-line { fill: none; stroke: var(--ink); stroke-width: .5; stroke-linejoin: round; }
+.sp-rise { animation: spRise 2s cubic-bezier(.45,.05,.25,1) .15s both; }
+@keyframes spRise { from { transform: translateY(132px); } to { transform: translateY(36px); } }
+.sp-wave { animation: spWave 1.6s linear infinite; }
+@keyframes spWave { to { transform: translateX(-48px); } }
+.sp-word { display: flex; justify-content: center; font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 10vw, 44px); line-height: 1; letter-spacing: .05em; }
+.sp-ch { display: inline-block; overflow: hidden; padding-block: .1em; }
+.sp-ch > span { display: inline-block; animation: spUp .65s cubic-bezier(.2,.9,.25,1) calc(.6s + var(--i) * .08s) both; }
+@keyframes spUp { from { transform: translateY(115%); } }
+.sp-gap { display: inline-block; width: .32em; }
+.sp-tag { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); animation: spFade .6s ease 1.3s both; }
+@keyframes spFade { from { opacity: 0; } }
+.sp-bar { width: 168px; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
+.sp-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--pink), var(--violet), var(--teal)); animation: spBar 2.1s cubic-bezier(.5,0,.2,1) .1s both; }
+@keyframes spBar { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+.sp-msg { min-height: 1.5em; color: var(--muted); font-size: 14px; font-weight: 500; }
+.sp-msg.swap { animation: spMsg .45s ease both; }
+@keyframes spMsg { from { opacity: 0; transform: translateY(5px); } }
+.sp-skip { position: absolute; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); left: 0; right: 0; text-align: center; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); animation: spFade .6s ease 1.2s both; }
+@media (prefers-reduced-motion: reduce) { #splash { display: none; } }
+/* calendar and day log */
+.cgrid { display: grid; gap: 16px; }
+.cgrid > * { min-width: 0; }
+@media (min-width: 980px) { .cgrid { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: start; } }
+.cal-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.cal-head h2 { font-size: 20px; font-weight: 800; }
+.cal-nav { display: flex; gap: 6px; align-items: center; }
+.icon-btn { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--line); display: grid; place-items: center; background: var(--surface); flex: none; }
+.icon-btn:hover:not(:disabled) { border-color: var(--muted); }
+.dow, .days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.dow span { text-align: center; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-bottom: 6px; }
+.day { min-height: 54px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border: 1px solid transparent; font-variant-numeric: tabular-nums; }
+.day:hover { border-color: var(--line); }
+.day .n { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; font-size: 14px; font-weight: 600; }
+.day.fert { background: color-mix(in srgb, var(--amber) 16%, var(--surface)); }
+.day.pm { background: color-mix(in srgb, var(--pink) 16%, var(--surface)); }
+.day.dueday { background: var(--pink-soft); }
+.day.today .n { background: var(--ink); color: var(--surface); }
+.day.sel { box-shadow: inset 0 0 0 2px var(--pink); }
+.mk { display: flex; align-items: center; justify-content: center; gap: 2px; height: 11px; }
+.mk .lg { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); }
+.mk .ap { width: 6px; height: 6px; border-radius: 50%; background: var(--violet); }
+.mk .ov { width: 7px; height: 7px; border-radius: 50%; border: 2px solid var(--amber); }
+.mk .du { font-size: 9px; font-weight: 800; color: var(--pink-text); line-height: 1; }
+.mk svg { display: block; }
+.legend { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--muted); }
+.legend li { display: flex; align-items: center; gap: 8px; }
+.sw { width: 14px; height: 14px; border-radius: 4px; flex: none; }
+.sw.m { background: color-mix(in srgb, var(--pink) 22%, var(--surface)); }
+.sw.f { background: color-mix(in srgb, var(--amber) 22%, var(--surface)); }
+.sw.o { border-radius: 50%; border: 2px solid var(--amber); width: 12px; height: 12px; }
+.sw.t { border-radius: 50%; background: var(--ink); }
+.sw.a { border-radius: 50%; background: var(--violet); width: 10px; height: 10px; }
+.sw.l { border-radius: 50%; background: var(--muted); width: 8px; height: 8px; }
+
+.log { display: flex; flex-direction: column; gap: 18px; }
+.log fieldset { border: 0; padding: 0; margin: 0; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.log legend { padding: 0; margin-bottom: 8px; font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+.flows { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.flow { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 2px 8px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface); font-size: 12px; font-weight: 600; min-width: 0; }
+.flow .ico { height: 26px; display: flex; align-items: center; justify-content: center; }
+.flow[aria-pressed="true"] { background: var(--pink-soft); border-color: var(--pink); color: var(--pink-text); font-weight: 700; }
+.cchips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { padding: 8px 14px; min-height: 38px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); font-size: 13.5px; font-weight: 600; }
+.chip[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+.sublabel { font-size: 13px; color: var(--muted); font-weight: 600; margin-top: 4px; }
+.privnote { padding: 10px 12px; border-radius: 10px; background: var(--amber-bg); color: var(--amber-ink); font-size: 13.5px; font-weight: 600; }
+.future { color: var(--muted); padding: 10px 12px; background: var(--soft); border-radius: 10px; }
+.log-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.saved { color: var(--muted); font-size: 13px; min-height: 1em; }
+.log textarea { resize: vertical; min-height: 64px; }
+
+/* cycle dashboard */
+.wrapw { display: grid; gap: 18px; align-items: center; }
+@media (min-width: 640px) { .wrapw { grid-template-columns: minmax(190px, 260px) minmax(0, 1fr); } }
+.wheel { position: relative; width: 100%; max-width: 260px; margin: 0 auto; aspect-ratio: 1; container-type: inline-size; }
+.wheel svg { width: 100%; height: 100%; display: block; }
+.arc { fill: none; stroke-width: 14; stroke-linecap: round; transition: opacity .3s; }
+.disc { fill: var(--soft); }
+.liq1 { fill: var(--ph); fill-opacity: .3; }
+.liq2 { fill: var(--ph); fill-opacity: .16; }
+.marker { fill: var(--surface); stroke: var(--ink); stroke-width: 3.5; }
+.wave { animation: slide 7s linear infinite; }
+.wave.w2 { animation-duration: 11s; animation-direction: reverse; }
+@keyframes slide { to { transform: translateX(-160px); } }
+@media (prefers-reduced-motion: reduce) { .wave { animation: none; } }
+.wheel-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; pointer-events: none; }
+.wheel-center .lbl { font-size: max(10px, 3.8cqw); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.wheel-center .num { font-family: var(--font-display); font-weight: 800; font-size: 27cqw; line-height: .95; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.wheel-center .phn { font-size: max(13px, 5cqw); font-weight: 700; }
+.wbig { font-size: 22px; font-weight: 800; margin-top: 4px; }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.pill { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; background: color-mix(in srgb, var(--pc) 16%, var(--surface)); border: 1px solid color-mix(in srgb, var(--pc) 35%, var(--surface)); }
+.pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--pc); }
+.tipp { margin-top: 12px; font-size: 14px; max-width: 58ch; }
+.grad .line { margin-top: 10px; font-weight: 600; font-size: 14.5px; }
+.grad .big2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(26px, 3.4vw, 32px); line-height: 1.1; margin-top: 6px; }
+
+/* charts */
+.chartbox { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.chartbox svg, .chartsvg svg { width: 100%; max-width: 640px; height: auto; display: block; }
+.ax { font-family: var(--font-body); font-size: 9px; fill: var(--muted); }
+.ax.now { fill: var(--ink); font-weight: 700; }
+.grid-l { stroke: var(--line); stroke-width: 1; }
+.cbar { fill: var(--pink); }
+.nodot { fill: var(--line); }
+.sx-list { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.sx-row { display: grid; grid-template-columns: minmax(84px, 120px) minmax(0, 1fr) 28px; align-items: center; gap: 12px; font-size: 14px; }
+.sx-row .tot { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 12.5px; font-weight: 600; }
+.track { height: 12px; display: flex; gap: 2px; }
+.track i { display: block; height: 100%; background: var(--c); border-radius: 3px; }
+.legend.tight { margin-top: 12px; }
+.callout { padding: 14px 16px; border-radius: 12px; background: var(--pink-soft); display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+.insgrid { display: grid; gap: 16px; }
+.insgrid > * { min-width: 0; }
+@media (min-width: 900px) { .insgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; } }
+.stackc { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.para { color: var(--muted); font-size: 14px; max-width: 66ch; }
+.para + .para { margin-top: 8px; }
+
+/* body page */
+.fields { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-top: 14px; }
+.fields > * { min-width: 0; }
+.stepper { display: flex; align-items: center; gap: 10px; }
+.stepper output { min-width: 5.5ch; font-variant-numeric: tabular-nums; font-weight: 700; }
+.dayswitch { display: flex; align-items: center; gap: 6px; }
+.mini { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; align-items: end; height: 110px; margin-top: 12px; }
+.mcol { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; height: 100%; min-width: 0; }
+.mcol i { display: block; width: 100%; max-width: 28px; border-radius: 5px 5px 2px 2px; background: var(--c); min-height: 3px; }
+.mcol .mv, .mcol .md { font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--muted); }
+
+/* learn */
+.articles { display: flex; flex-direction: column; gap: 10px; }
+.articles details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 0 18px; box-shadow: var(--shadow); }
+.articles summary { list-style: none; cursor: pointer; padding: 16px 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.articles summary::-webkit-details-marker { display: none; }
+.articles summary .t { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.articles summary .cap { color: var(--pink-text); }
+.articles summary svg { flex: none; transition: transform .2s; color: var(--muted); }
+.articles details[open] summary svg { transform: rotate(180deg); }
+.articles .body { padding-bottom: 18px; display: flex; flex-direction: column; gap: 10px; color: var(--muted); max-width: 68ch; }
+
+/* settings extras */
+.toggle { display: flex; align-items: flex-start; gap: 12px; }
+.toggle input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--pink); flex: none; }
+.toggle label { font-weight: 700; font-size: 14px; }
+.toggle .hint { display: block; font-weight: 400; }
+.datatxt { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; }
+.sep { border: 0; border-top: 1px solid var(--line); margin: 4px 0; width: 100%; }
+
+/* lock */
+#lock { position: fixed; inset: 0; z-index: 90; background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 24px; }
+.lockbox { width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 14px; text-align: center; }
+.lockbox .logo { font-size: 24px; }
+.lockbox input { text-align: center; font-size: 22px; letter-spacing: .5em; }
+.sidebtns { grid-area: out; display: flex; gap: 2px; }
+:root{--amber:#D9890B}
+.msg{font-size:13px;min-height:1em;color:var(--muted)}.msg.err{color:var(--red-ink)}
+.roles.r3{grid-template-columns:repeat(auto-fit,minmax(112px,1fr))}
+.sidebtns .logout{margin:0;order:0}
+@media (min-width:900px){.sidebtns{order:3;margin-top:auto}}
+</style></head><body>
+
+<div id="splash" role="status" aria-label="Loading G SPOT">
+  <div class="sp-inner">
+    <svg class="sp-art" viewBox="0 0 160 160" aria-hidden="true">
+      <defs>
+        <linearGradient id="spGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D93B79"/><stop offset=".55" stop-color="#7A4FD0"/><stop offset="1" stop-color="#1B9A86"/></linearGradient>
+        <linearGradient id="spLiq" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E5528D"/><stop offset="1" stop-color="#7A4FD0"/></linearGradient>
+        <clipPath id="spDrop"><path d="M12 2.6c3.7 4.5 6.1 7.8 6.1 11.1a6.1 6.1 0 0 1-12.2 0C5.9 10.4 8.3 7.1 12 2.6z" transform="translate(26 22) scale(5)"/></clipPath>
+      </defs>
+      <circle class="sp-ring" cx="80" cy="80" r="72" transform="rotate(-90 80 80)"/>
+      <path class="sp-bg" d="M12 2.6c3.7 4.5 6.1 7.8 6.1 11.1a6.1 6.1 0 0 1-12.2 0C5.9 10.4 8.3 7.1 12 2.6z" transform="translate(26 22) scale(5)"/>
+      <g clip-path="url(#spDrop)"><g class="sp-rise"><g class="sp-wave"><path fill="url(#spLiq)" d="M-48 0 q24 -6 48 0 t48 0 t48 0 t48 0 t48 0 V130 H-48 Z"/></g></g></g>
+      <path class="sp-line" d="M12 2.6c3.7 4.5 6.1 7.8 6.1 11.1a6.1 6.1 0 0 1-12.2 0C5.9 10.4 8.3 7.1 12 2.6z" transform="translate(26 22) scale(5)"/>
+    </svg>
+    <div class="sp-word" aria-hidden="true"><span class="sp-ch"><span style="--i:0">G</span></span><span class="sp-gap"></span><span class="sp-ch"><span style="--i:2">S</span></span><span class="sp-ch"><span style="--i:3">P</span></span><span class="sp-ch"><span style="--i:4">O</span></span><span class="sp-ch"><span style="--i:5">T</span></span></div>
+    <p class="sp-tag">Pregnancy &middot; Health &amp; Tracking</p>
+    <div class="sp-bar" aria-hidden="true"><i></i></div>
+    <p class="sp-msg swap" id="spMsg">Preparing your dashboard</p>
+  </div>
+  <p class="sp-skip">Tap to skip</p>
+</div>
+
+<div id="root"></div>
+<div id="toast" role="status" hidden></div>
+<div id="lock" hidden><form id="lockForm" class="lockbox" novalidate><span class="logo">G SPOT</span><h2>Enter your PIN</h2><input id="unlockPin" type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="4 digit PIN"><p class="msg" id="lockMsg" role="status"></p><button class="btn pink" type="submit">Unlock</button><button type="button" class="link" id="forgotPin">Forgot PIN? Sign in with password</button></form></div>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const pad = n => String(n).padStart(2, '0');
+const key = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const parse = k => { const a = k.split('-').map(Number); return new Date(a[0], a[1] - 1, a[2]); };
+const dnum = k => { const a = k.split('-').map(Number); return Math.round(Date.UTC(a[0], a[1] - 1, a[2]) / 86400000); };
+const add = (k, n) => { const d = parse(k); d.setDate(d.getDate() + n); return key(d); };
+const today = () => key(new Date());
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+const validDate = k => DATE_RE.test(k) && key(parse(k)) === k;
+const fmt = (k, o) => parse(k).toLocaleDateString(undefined, o);
+const SHORT = { weekday: 'short', month: 'short', day: 'numeric' };
+const MD = { month: 'short', day: 'numeric' }, MDY = { month: 'short', day: 'numeric', year: 'numeric' }, LONGD = { month: 'long', day: 'numeric', year: 'numeric' };
+const fmtT = t => { const a = String(t).split(':'), h = +a[0]; return `${h % 12 || 12}:${a[1]} ${h >= 12 ? 'PM' : 'AM'}`; };
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+const hashPw = p => {
+  const s = 'gspot:' + p; let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+  for (let i = 0; i < s.length; i++) { const c = s.charCodeAt(i); h1 = Math.imul(h1 ^ c, 2654435761); h2 = Math.imul(h2 ^ c, 1597334677); }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return ('00000000' + (h2 >>> 0).toString(16)).slice(-8) + ('00000000' + (h1 >>> 0).toString(16)).slice(-8);
+};
+
+/* ---------- data ---------- */
+const LOG_TYPES = { weight: 'Weight', bp: 'Blood pressure', symptom: 'Symptom', water: 'Water intake', kicks: 'Baby kicks' };
+const FRUIT = { 4: 'poppy seed', 5: 'apple seed', 6: 'sweet pea', 7: 'blueberry', 8: 'raspberry', 9: 'green olive', 10: 'prune', 11: 'lime', 12: 'plum', 13: 'peach', 14: 'lemon', 15: 'apple', 16: 'avocado', 17: 'pomegranate', 18: 'bell pepper', 19: 'tomato', 20: 'banana', 21: 'carrot', 22: 'spaghetti squash', 23: 'large mango', 24: 'cantaloupe', 25: 'cauliflower', 26: 'head of lettuce', 27: 'rutabaga', 28: 'eggplant', 29: 'butternut squash', 30: 'cabbage', 31: 'coconut', 32: 'jicama', 33: 'pineapple', 34: 'large cantaloupe', 35: 'honeydew melon', 36: 'head of romaine', 37: 'bunch of Swiss chard', 38: 'leek', 39: 'mini watermelon', 40: 'small pumpkin' };
+const fruit = w => w < 4 ? 'too small to see yet' : FRUIT[Math.min(w, 40)];
+const withArticle = f => /^too/.test(f) ? 'something ' + f : (/^[aeiou]/i.test(f) ? 'an ' : 'a ') + f;
+const MILE = {
+  4: ['The embryo settles into the lining of the womb', 'The placenta starts to form', 'Pregnancy hormones begin to rise'],
+  6: ['A tiny heartbeat can sometimes be seen on ultrasound', 'The neural tube closes', 'Buds for arms and legs appear'],
+  8: ['Fingers and toes are forming', 'All major organs have begun to form', 'Baby is already moving, though you cannot feel it'],
+  10: ['Vital organs are formed and start to work', 'Tiny nails begin to grow', 'Baby is now called a fetus'],
+  12: ['Reflexes develop and fingers can open and close', 'Kidneys start making urine', 'The face looks more human each week'],
+  14: ['Baby can make facial expressions', 'The neck lengthens and the head sits more upright', 'Fine hair called lanugo covers the skin'],
+  16: ['Eyes can move and bones are hardening', 'Muscles are getting stronger', 'First flutters of movement may appear soon'],
+  18: ['Ears are in place and baby may hear muffled sounds', 'Baby yawns and hiccups', 'Nerves are getting a protective coating'],
+  20: ['Halfway there, and the anatomy scan is usually done around now', 'A waxy coat called vernix protects the skin', 'Baby swallows and gets stronger kicks'],
+  22: ['Sense of touch is developing', 'Eyebrows and eyelids are fully formed', 'Baby responds to familiar sounds'],
+  24: ['Hearing is developing', 'Lungs continue to develop', 'Movements become stronger'],
+  26: ['Eyes begin to open', 'Baby practises breathing movements', 'Baby reacts to loud sounds'],
+  28: ['Baby can open and close their eyes', 'Brain activity is growing fast', 'Sleep and wake cycles are forming'],
+  30: ['The brain is growing rapidly', 'Bones are fully formed but still soft', 'Baby gains fat under the skin'],
+  32: ['Baby practises breathing and sucking', 'Toenails have grown', 'Most babies start settling head down soon'],
+  34: ['Lungs are maturing', 'Fingernails reach the fingertips', 'Baby is putting on weight steadily'],
+  36: ['Baby may drop lower into the pelvis', 'Weight gain continues each week', 'Most organs are ready for life outside'],
+  38: ['Organs are ready for birth', 'Baby has a firm grasp', 'Baby is considered early term and almost ready'],
+  40: ['Baby is full term', 'Only a small share of babies arrive on the exact due date', 'Ask your provider what to do if you go past it']
+};
+const mile = w => { let k = 4; Object.keys(MILE).forEach(n => { if (+n <= w) k = +n; }); return MILE[k]; };
+const tips = (w, tri) => {
+  const t = [];
+  if (tri === 1) { t.push('Take a prenatal vitamin with folic acid every day.', 'Book your first prenatal visit and ask which tests are due.'); }
+  else if (tri === 2) { t.push('Stay hydrated and keep logging your baby kicks daily.', 'Attend your scheduled prenatal checkup and bring your lab results.'); }
+  else { t.push('Pack your hospital bag and learn the signs of labor.', 'Count baby kicks daily and call your provider if you notice a clear drop in movement.'); }
+  if (w >= 24 && w <= 28) t.push('Ask about the glucose screening test, usually done between weeks 24 and 28.');
+  if (w >= 27 && w <= 36) t.push('Ask about the Tdap vaccine, recommended between weeks 27 and 36.');
+  return t;
+};
+
+const KEY = 'gspot.preg.v1';
+let DB = null;
+const load = () => {
+  try {
+    const r = JSON.parse(localStorage.getItem(KEY));
+    if (r && typeof r === 'object' && r.users && typeof r.users === 'object') {
+      Object.keys(r.users).forEach(n => { const u = normUser(r.users[n]); if (u) r.users[n] = u; else delete r.users[n]; });
+      return r;
+    }
+  } catch (e) {}
+  return null;
+};
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(DB)); } catch (e) {} };
+const rng = a => () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+const PROB = { men: { Cramps: .7, Backache: .4, Fatigue: .5, Headache: .2 }, fol: { Acne: .1, Fatigue: .1 }, ovu: { Cramps: .15, 'Tender breasts': .2 }, lut: { Bloating: .45, Cravings: .45, 'Tender breasts': .4, Headache: .25, Acne: .25, Fatigue: .3 } };
+const MOODP = { men: ['Low', 'Calm'], fol: ['Radiant', 'Calm'], ovu: ['Radiant'], lut: ['Irritable', 'Anxious', 'Low'] };
+const seedDemo = () => {
+  const t = today(), L = (d, type, value) => ({ id: uid(), date: add(t, d), type, value });
+  DB.users.maria = {
+    name: 'Maria', hash: hashPw('maria123'), role: 'mother', mode: 'pregnant', lmp: add(t, -(23 * 7 + 2)), demo: true, prefs: defaultPrefs(), pin: null,
+    logs: [L(-1, 'weight', 62.4), L(-1, 'bp', '110/70'), L(-2, 'water', 6), L(0, 'kicks', 12), L(-2, 'symptom', 'mild back pain'), L(-8, 'weight', 62), L(-8, 'bp', '112/72'), L(-15, 'weight', 61.7), L(-9, 'water', 8)],
+    appts: [
+      { id: uid(), title: 'Prenatal Checkup', date: add(t, 9), time: '09:00', who: 'Dr. Reyes', note: 'Bring your lab results' },
+      { id: uid(), title: 'Ultrasound', date: add(t, 20), time: '10:30', who: 'Dr. Reyes', note: 'Anatomy review' },
+      { id: uid(), title: 'Vaccine (Tdap)', date: add(t, 41), time: '14:00', who: 'Clinic nurse', note: 'Ask about side effects' }
+    ],
+    days: {}
+  };
+  const md = DB.users.maria.days;
+  md[add(t, -1)] = cleanDay({ sx: ['Back pain', 'Fatigue'], mood: 'Calm' });
+  md[add(t, -3)] = cleanDay({ act: ['prot', 'org'], drive: 'Medium', mood: 'Radiant' });
+  md[add(t, -6)] = cleanDay({ sx: ['Heartburn'], mood: 'Calm' });
+  md[add(t, -10)] = cleanDay({ act: ['prot'], drive: 'Low', sx: ['Nausea'] });
+  md[add(t, -14)] = cleanDay({ sx: ['Back pain'], mood: 'Low' });
+  DB.users.partner = { name: 'Alex', hash: hashPw('partner123'), role: 'family', mode: 'pregnant', follows: 'maria', demo: true, logs: [], appts: [], prefs: defaultPrefs(), pin: null, days: {} };
+  const s0 = add(t, -11), st = [s0]; [28, 27, 29, 28, 30].forEach(len => st.unshift(add(st[0], -len)));
+  const u = { name: 'Sam', hash: hashPw('sam12345'), role: 'mother', mode: 'cycle', lastStart: s0, starts: st, cycle: 28, period: 5, lmp: '', demo: true, prefs: defaultPrefs(), pin: null, logs: [], appts: [], days: {} };
+  const r = rng(20261013), flowDays = {};
+  st.forEach(s => [3, 4, 3, 2, 1].forEach((f, j) => { const k = add(s, j); if (dnum(k) <= dnum(t)) flowDays[k] = f; }));
+  const q = cparams(u);
+  for (let i = 0; i <= 120; i++) {
+    const k = add(t, -i), d = cday(u, k), ph = phaseOf(u, d), e = cleanDay({});
+    if (flowDays[k]) e.flow = flowDays[k];
+    if (r() > 0.2 || e.flow) {
+      Object.keys(PROB[ph]).forEach(s => { if (r() < PROB[ph][s]) e.sx.push(s); });
+      if (r() < 0.5) { const m = MOODP[ph]; e.mood = m[Math.floor(r() * m.length)]; }
+    }
+    if (i > 0 && ph !== 'men' && r() < 0.11) {
+      const x = r(); e.act = x < 0.45 ? ['prot'] : x < 0.65 ? ['unprot'] : x < 0.8 ? ['oral'] : ['solo'];
+      if (e.act[0] === 'prot' || e.act[0] === 'unprot') e.act.push('org');
+      e.drive = ph === 'ovu' ? 'High' : ph === 'lut' ? 'Low' : 'Medium';
+    }
+    if (r() < 0.7) e.bbt = Math.round((36.4 + ((ph === 'lut') || (ph === 'ovu' && d >= q.ov) ? 0.32 : 0) + (r() - 0.5) * 0.16) * 100) / 100;
+    if (r() < 0.45) e.weight = Math.round((62.4 + Math.sin(i / 11) * 0.5 + (r() - 0.5) * 0.4) * 10) / 10;
+    if (r() < 0.8) e.water = 4 + Math.floor(r() * 5);
+    if (r() < 0.7) e.sleep = 5.5 + Math.floor(r() * 7) / 2;
+    if (!isEmptyDay(e)) u.days[k] = e;
+  }
+  DB.users.sam = u;
+};
+
+
+/* ---------- pregnancy maths ---------- */
+const preg = lmp => {
+  const days = dnum(today()) - dnum(lmp), week = Math.max(1, Math.floor(days / 7) + 1);
+  return { days, week, tri: week <= 13 ? 1 : week <= 27 ? 2 : 3, due: add(lmp, 280), left: 280 - days, pct: Math.max(0, Math.min(100, days / 280 * 100)) };
+};
+const TRI = { 1: '1st Trimester', 2: '2nd Trimester', 3: '3rd Trimester' };
+const sortLogs = l => l.slice().sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
+const latest = (u, type, maxAge) => {
+  const f = sortLogs(u.logs).filter(l => l.type === type && (maxAge == null || dnum(today()) - dnum(l.date) <= maxAge));
+  return f[0] || null;
+};
+const nextAppt = u => u.appts.filter(a => a.date >= today()).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time))[0] || null;
+const ago = k => { const n = dnum(today()) - dnum(k); return n === 0 ? 'today' : n === 1 ? 'yesterday' : fmt(k, MD); };
+const unitVal = l => l.type === 'weight' ? `${l.value} kg` : l.type === 'water' ? plural(l.value, 'glass').replace('glasss', 'glasses') : l.type === 'kicks' ? `${l.value} kicks` : String(l.value);
+
+const URGENT_RE = /bleed|leaking|water broke|chest pain|trouble breathing|can'?t breathe|seizure|no movement|can'?t feel (the )?baby/i;
+const WATCH_RE = /headache|blurr|vision|swell|contraction|fever|faint/i;
+const alertsFor = u => {
+  const out = [], p = preg(u.lmp);
+  const bp = latest(u, 'bp', 7);
+  if (bp) {
+    const [s, d] = String(bp.value).split('/').map(Number);
+    if (s >= 160 || d >= 110) out.push({ lv: 'urgent', title: 'Very high blood pressure', text: `Your reading of ${bp.value} is very high. Contact your care provider or go to urgent care now.` });
+    else if (s >= 140 || d >= 90) out.push({ lv: 'watch', title: 'High blood pressure', text: `Your reading of ${bp.value} is high. Contact your care provider today, and seek urgent care if you also have a severe headache or vision changes.` });
+    else if (s < 90 || d < 60) out.push({ lv: 'watch', title: 'Low blood pressure', text: `Your reading of ${bp.value} is low. Sit or lie down, drink water, and tell your provider if you feel faint or dizzy.` });
+  }
+  const w = sortLogs(u.logs).filter(l => l.type === 'weight' && dnum(today()) - dnum(l.date) <= 21);
+  for (let i = 1; i < w.length; i++) {
+    if (dnum(w[0].date) - dnum(w[i].date) <= 7 && w[0].value - w[i].value > 2) { out.push({ lv: 'watch', title: 'Fast weight gain', text: `Your weight went up by more than 2 kg within a week. Mention it to your provider, especially if you also have swelling.` }); break; }
+  }
+  const k = latest(u, 'kicks', 3);
+  if (k && p.week >= 28 && Number(k.value) < 10) out.push({ lv: 'watch', title: 'Fewer kicks logged', text: 'A common check is to feel about 10 movements within 2 hours. Call your provider if you notice a clear decrease in your baby’s movement.' });
+  sortLogs(u.logs).filter(l => l.type === 'symptom' && dnum(today()) - dnum(l.date) <= 3).forEach(l => {
+    if (URGENT_RE.test(l.value)) out.push({ lv: 'urgent', title: `Warning symptom: ${l.value}`, text: 'Contact your care provider or urgent care today. Call emergency services for heavy bleeding, chest pain or trouble breathing.' });
+    else if (WATCH_RE.test(l.value)) out.push({ lv: 'watch', title: `Keep an eye on: ${l.value}`, text: 'This can be normal, but if it is severe or does not ease, contact your care provider.' });
+  });
+  const wa = latest(u, 'water', 3);
+  if (wa && Number(wa.value) < 6) out.push({ lv: 'info', title: 'Drink a little more water', text: `You logged ${wa.value} glasses. Many people aim for about 8 glasses a day in pregnancy.` });
+  return out;
+};
+const status = list => list.some(a => a.lv === 'urgent') ? 'urgent' : list.some(a => a.lv === 'watch') ? 'watch' : 'ok';
+
+/* ---------- validation ---------- */
+const num = v => (v === '' || !/^-?\d*\.?\d+$/.test(v)) ? NaN : Number(v);
+const V = {
+  weight: v => { if (v === '') return 'Error: please enter a weight.'; const n = num(v); if (isNaN(n)) return 'Error: weight must be a number.'; if (n < 0) return 'Error: weight cannot be negative. Please enter a valid number.'; if (n < 30 || n > 250) return 'Error: weight must be between 30 and 250 kg.'; return null; },
+  bp: v => { if (v === '') return 'Error: please enter a blood pressure like 110/70.'; const m = /^(\d{2,3})\s*\/\s*(\d{2,3})$/.exec(v); if (!m) return 'Error: use the format 110/70.'; const s = +m[1], d = +m[2]; if (s < 60 || s > 250 || d < 30 || d > 150 || s <= d) return 'Error: those numbers do not look right. Check the reading and try again.'; return null; },
+  symptom: v => { if (v === '') return 'Error: this field cannot be empty.'; if (v.length > 120) return 'Error: keep it under 120 characters.'; return null; },
+  water: v => { if (v === '') return 'Error: please enter the number of glasses.'; const n = num(v); if (isNaN(n)) return 'Error: please enter numbers only.'; if (n < 0) return 'Error: water intake cannot be negative.'; if (n % 1 !== 0 || n > 30) return 'Error: enter a whole number of glasses from 0 to 30.'; return null; },
+  kicks: v => { if (v === '') return 'Error: please enter the number of kicks.'; const n = num(v); if (isNaN(n)) return 'Error: please enter numbers only.'; if (n < 0) return 'Error: kicks cannot be negative.'; if (n % 1 !== 0 || n > 200) return 'Error: enter a whole number from 0 to 200.'; return null; },
+  date: v => { if (!validDate(v)) return 'Error: please enter a valid date.'; if (v > today()) return 'Error: the date cannot be in the future.'; return null; },
+  lmp: v => { if (!validDate(v)) return 'Error: please enter a valid date.'; if (v > today()) return 'Error: the date cannot be in the future.'; if (dnum(today()) - dnum(v) > 294) return 'Error: that date is more than 42 weeks ago. Check the year.'; return null; }
+};
+const norm = (type, v) => type === 'weight' ? Math.round(Number(v) * 10) / 10 : type === 'water' || type === 'kicks' ? Number(v) : type === 'bp' ? v.replace(/\s/g, '') : v;
+
+/* ---------- state ---------- */
+let route = 'landing';
+const ui = { sel: '', month: null, revealed: false, focus: null, flash: '', addAppt: false, resched: null, tipWeek: null, filter: 'all', preview: false };
+const me = () => (DB && DB.session && DB.users[DB.session]) || null;
+const root = $('#root');
+
+/* ---------- views ---------- */
+const greet = () => { const h = new Date().getHours(); return h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening'; };
+const first = n => String(n).trim().split(/\s+/)[0];
+
+const landing = () => {
+  const p = preg(add(today(), -(23 * 7 + 2)));
+  return `<div class="land"><div class="wrap">
+    <nav class="l-nav org" aria-label="Site">
+      <span class="logo">G SPOT</span>
+      <div class="l-links">
+        <button class="plain hide-s" data-scroll="features">Features</button>
+        <button class="plain hide-s" data-scroll="how">How it works</button>
+        <button class="plain" data-go="login">Login</button>
+        <button class="btn pink pill" data-go="register">Register</button>
+      </div>
+    </nav>
+    <section class="hero">
+      <div class="org">
+        <span class="badge">For expectant mothers and families</span>
+        <h1>Your cycle and pregnancy, <em>organized</em> in one place.</h1>
+        <p class="lede">Track symptoms, weight, blood pressure and baby kicks. Never miss a checkup. Get weekly baby development tips, all in your browser.</p>
+        <div class="cta"><button class="btn navy pill" data-go="register">Get Started</button><button class="btn line pill" data-go="login">Login</button></div>
+      </div>
+      <div class="hero-panel org" aria-hidden="true">
+        <div class="float f1"><span class="cap" style="color:var(--violet)">Current week</span><span class="big">Week ${p.week}</span><span class="sm">Size of ${withArticle(fruit(p.week))}</span><div class="bar"><i style="width:${p.pct.toFixed(0)}%"></i></div></div>
+        <div class="float f2"><span class="cap" style="color:var(--mint-ink)">Health alert</span><span class="big">All values normal</span></div>
+        <div class="float f3"><span class="cap" style="color:#F2C56B">Next checkup</span><span class="big">${fmt(add(today(), 9), MD)} &middot; 9:00 AM</span></div>
+      </div>
+    </section>
+    <section class="feats" id="features" aria-label="Features">
+      <div class="feat org"><h3>Due Date Calculator</h3><p>Week and trimester, automatically.</p></div>
+      <div class="feat org"><h3>Health Logger</h3><p>Symptoms, weight, BP, kicks.</p></div>
+      <div class="feat org"><h3>Appointments</h3><p>Checkups, ultrasounds, vaccines.</p></div>
+      <div class="feat org"><h3>Family View</h3><p>Partners follow along, view-only.</p></div>
+    </section>
+    <section class="how" id="how">
+      <h2>How it works</h2>
+      <div class="steps">
+        <div class="step org"><div class="n">1</div><h3>Enter your last period date</h3><p>G SPOT works out your due date, current week and trimester.</p></div>
+        <div class="step org"><div class="n">2</div><h3>Log and schedule</h3><p>Record symptoms, weight, blood pressure and kicks, and keep every appointment in one list.</p></div>
+        <div class="step org"><div class="n">3</div><h3>Share with family</h3><p>Partners and family sign up with your username and see your week and appointments, view-only.</p></div>
+      </div>
+    </section>
+    <p class="foot">G SPOT gives general information and is not medical advice. Your data stays in this browser on this device. Always follow your own care provider&rsquo;s guidance.</p>
+  </div></div>`;
+};
+
+const authArt = (title, text) => `<div class="auth-art org"><span class="logo">G SPOT</span><div><h1>${title}</h1><p>${text}</p></div></div>`;
+const loginView = () => `<div class="auth"><div class="auth-card">
+  ${authArt('Welcome back, mom-to-be', 'Log in to see your weekly updates, health logs, and appointments.')}
+  <form class="auth-form form org" data-form="login" novalidate>
+    <h2>Login</h2>
+    <div class="field"><label for="lu">Username</label><input id="lu" name="username" autocomplete="username" autocapitalize="none" placeholder="your username"><div class="err" data-err="username" hidden></div></div>
+    <div class="field"><label for="lp">Password</label><input id="lp" name="password" type="password" autocomplete="current-password" placeholder="password"><div class="err" data-err="password" hidden></div></div>
+    <button class="btn pink block" type="submit">Login</button>
+    <p class="muted" style="font-size:14px">Are you new? <button type="button" class="link" data-go="register">Register</button> &nbsp;&middot;&nbsp; <button type="button" class="link" data-go="landing">Back home</button></p>
+    <div class="demo-box"><span><b>Try a demo.</b> Sample data, nothing real.</span><div class="row"><button type="button" class="btn soft" data-act="demo-mother">Open Maria&rsquo;s account</button><button type="button" class="btn soft" data-act="demo-cycle">Open Sam&rsquo;s cycle account</button><button type="button" class="btn soft" data-act="demo-family">Open family view</button></div></div>
+  </form></div></div>`;
+const registerView = () => `<div class="auth"><div class="auth-card">
+  ${authArt('Start your journey', 'Create a free account to track your cycle or your pregnancy, with your calendar, logs and appointments in one calm place.')}
+  <form class="auth-form form org" data-form="register" novalidate>
+    <h2>Create account</h2>
+    <div class="field"><span class="lbl">I am</span><div class="roles r3"><label class="role"><input type="radio" name="role" value="cycle" checked><span>Tracking my cycle</span></label><label class="role"><input type="radio" name="role" value="mother"><span>Expecting</span></label><label class="role"><input type="radio" name="role" value="family"><span>Partner or family</span></label></div></div>
+    <div class="field"><label for="rn">Full name</label><input id="rn" name="name" autocomplete="name" maxlength="40"><div class="err" data-err="name" hidden></div></div>
+    <div class="field"><label for="ru">Username</label><input id="ru" name="username" autocomplete="username" autocapitalize="none" maxlength="20"><span class="hint">3 to 20 letters, numbers or underscores.</span><div class="err" data-err="username" hidden></div></div>
+    <div class="field"><label for="rp">Password</label><input id="rp" name="password" type="password" autocomplete="new-password"><div class="err" data-err="password" hidden></div></div>
+    <div class="field" data-role="cycle"><label for="rc">First day of your last period</label><input id="rc" name="cstart" type="date"><div class="err" data-err="cstart" hidden></div></div>
+    <div class="formgrid" data-role="cycle"><div class="field"><label for="rcl">Cycle length (days)</label><input id="rcl" name="clen" type="number" min="21" max="45" value="28" inputmode="numeric"><div class="err" data-err="clen" hidden></div></div><div class="field"><label for="rpl">Period length (days)</label><input id="rpl" name="plen" type="number" min="2" max="10" value="5" inputmode="numeric"><div class="err" data-err="plen" hidden></div></div></div>
+    <div class="field" data-role="mother" hidden><label for="rl">First day of your last menstrual period</label><input id="rl" name="lmp" type="date"><div class="err" data-err="lmp" hidden></div></div>
+    <div class="field" data-role="family" hidden><label for="rf">Mother&rsquo;s username</label><input id="rf" name="follows" autocapitalize="none"><span class="hint">Ask her for the username shown on her profile page.</span><div class="err" data-err="follows" hidden></div></div>
+    <button class="btn pink block" type="submit">Create account</button>
+    <p class="muted" style="font-size:14px">Already registered? <button type="button" class="link" data-go="login">Login</button> &nbsp;&middot;&nbsp; <button type="button" class="link" data-go="landing">Back home</button></p>
+  </form></div></div>`;
+
+const NAV = {
+  cycle: [['dashboard', 'Dashboard'], ['calendar', 'Calendar'], ['insights', 'Insights'], ['body', 'Body'], ['learn', 'Learn'], ['profile', 'My Profile']],
+  pregnant: [['dashboard', 'Dashboard'], ['calendar', 'Calendar'], ['logs', 'Health Logs'], ['appts', 'Appointments'], ['tips', 'Weekly Baby Tips'], ['insights', 'Insights'], ['alerts', 'Health Alerts'], ['learn', 'Learn'], ['profile', 'My Profile']]
+};
+const shell = (active, content) => {
+  const u = me(), act = active === 'add' ? 'logs' : active;
+  return `<div class="shell"><aside class="side">
+    <button class="brand-btn" data-go="dashboard" aria-label="G SPOT dashboard"><span class="logo">G SPOT</span><span class="sub">${u.mode === 'cycle' ? 'Cycle &middot; Health &amp; Tracking' : 'Pregnancy &middot; Health &amp; Tracking'}</span></button>
+    <div class="sidebtns">${u.pin ? '<button class="logout" data-act="lock-now">Lock</button>' : ''}<button class="logout" data-act="logout">Logout</button></div>
+    <nav class="snav" aria-label="Main">${NAV[u.mode].map(i => `<button data-go="${i[0]}"${i[0] === act ? ' aria-current="page"' : ''}>${i[1]}</button>`).join('')}</nav>
+  </aside><main class="main">${content}</main></div>`;
+};
+const sampleBanner = u => u.demo ? `<div class="sample org"><span>You are looking at sample data. Create your own account to start tracking.</span><button class="link" data-act="logout-register">Create my account</button></div>` : '';
+
+const pregDash = () => {
+  const u = me(), p = preg(u.lmp), al = alertsFor(u), st = status(al), nx = nextAppt(u);
+  const tile = (label, type, fmtv) => { const l = latest(u, type); return `<div class="tile"><div class="l">${label}</div><div class="v">${l ? fmtv(l) : '&ndash;'}</div><div class="d">${l ? ago(l.date) : 'not logged'}</div></div>`; };
+  const recent = sortLogs(u.logs).slice(0, 3);
+  const top = al.filter(a => a.lv !== 'info')[0];
+  const acard = top
+    ? `<h2>${esc(top.title)}</h2><p>${esc(top.text)}</p>`
+    : `<h2>All values normal</h2><p>Your latest logs are within healthy ranges.</p>`;
+  return shell('dashboard', `
+    ${sampleBanner(u)}
+    <div class="pagehead org"><div><h1>${greet()}, ${esc(first(u.name))}</h1><p class="sub">Here is your pregnancy summary for today.</p></div><button class="btn pink" data-go="add">+ Add Health Log</button></div>
+    <div class="dgrid">
+      <section class="card grad prog org" aria-label="Current progress">
+        <span class="cap">Current progress</span>
+        <div class="wkrow"><span class="wk">Week ${p.week > 42 ? '40+' : p.week}</span><span class="tri">${TRI[p.tri]}</span></div>
+        <p class="due">Estimated due date: ${fmt(p.due, LONGD)}</p>
+        <div class="bar" role="img" aria-label="${Math.round(p.pct)} percent of pregnancy completed"><i style="width:${p.pct.toFixed(1)}%"></i></div>
+        <p class="size">Your baby is about the size of ${withArticle(fruit(p.week))}</p>
+      </section>
+      <section class="card appt-next org" aria-label="Next appointment">
+        <span class="cap" style="color:var(--violet)">Next appointment</span>
+        ${nx ? `<h2>${esc(nx.title)}</h2><p class="when">${fmt(nx.date, MDY)} &middot; ${fmtT(nx.time)}</p>${nx.note ? `<p class="rem">Reminder: ${esc(nx.note.charAt(0).toLowerCase() + nx.note.slice(1))}</p>` : ''}`
+          : `<h2>Nothing booked</h2><p class="rem">Add your next checkup so you never miss it.</p><button class="link" data-go="appts" style="margin-top:8px">Open appointments</button>`}
+      </section>
+      <section class="card org" aria-label="Recent health logs">
+        <h2>Recent Health Logs</h2>
+        <div class="tiles">
+          ${tile('Weight', 'weight', l => `${l.value} kg`)}${tile('Blood Pressure', 'bp', l => esc(l.value))}${tile('Water Intake', 'water', l => plural(l.value, 'glass').replace('glasss', 'glasses'))}${tile('Baby Kicks', 'kicks', l => l.value)}
+        </div>
+        ${recent.length ? `<ul class="mini-list">${recent.map(l => `<li><span>${l.type === 'symptom' ? 'Symptom: ' + esc(l.value) : esc(LOG_TYPES[l.type]) + ' log recorded'}</span><span>${fmt(l.date, MD)}</span></li>`).join('')}</ul>` : `<p class="empty">No logs yet. Use Add Health Log to record your first one.</p>`}
+      </section>
+      <section class="card acard ${st} org" aria-label="Health alert">
+        <span class="cap">Health alert</span>${acard}
+        <button class="link" data-go="alerts">See all alerts</button>
+      </section>
+    </div>`);
+};
+
+const logsView = () => {
+  const u = me(), f = ui.filter;
+  const rows = sortLogs(u.logs).filter(l => f === 'all' || l.type === f);
+  const types = [['all', 'All'], ...Object.entries(LOG_TYPES)];
+  return shell('logs', `
+    <div class="pagehead org"><div><h1>Health and Symptom Logger</h1><p class="sub">Record how you feel and how your numbers change.</p></div><button class="btn pink" data-go="add">+ Add Health Log</button></div>
+    <div class="lgrid">
+      <form class="card form org" data-form="quicklog" novalidate>
+        <h2>Add new log</h2>
+        <div class="field"><label for="qt">Type</label><select id="qt" name="type">${Object.entries(LOG_TYPES).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select></div>
+        <div class="field"><label for="qv">Value</label><input id="qv" name="value" placeholder="Weight (kg)" inputmode="decimal" autocomplete="off"><div class="err" data-err="value" hidden></div></div>
+        <button class="btn pink block" type="submit">Save Log</button>
+      </form>
+      <section class="card org">
+        <h2>Saved logs</h2>
+        <div class="chips" role="group" aria-label="Filter logs">${types.map(t => `<button data-filter="${t[0]}" aria-pressed="${f === t[0]}">${t[1]}</button>`).join('')}</div>
+        ${rows.length ? `<div class="tscroll"><table class="tbl"><thead><tr><th>Date</th><th>Type</th><th>Value</th><th><span class="sr" style="position:absolute;left:-9999px">Actions</span></th></tr></thead><tbody>
+          ${rows.map(l => `<tr><td>${fmt(l.date, MD)}</td><td>${esc(LOG_TYPES[l.type])}</td><td>${esc(unitVal(l))}</td><td><button class="link del" data-act="del-log" data-id="${esc(l.id)}">Delete</button></td></tr>`).join('')}
+        </tbody></table></div>` : `<p class="empty">Nothing here yet.</p>`}
+      </section>
+    </div>`);
+};
+
+const addView = () => shell('add', `
+  <div class="pagehead org"><div><h1>Add Health Log</h1><p class="sub">Fill in what you have today. Leave the rest blank.</p></div><button class="btn soft" data-go="logs">Back to logs</button></div>
+  <div class="addgrid">
+    <form class="card form org" data-form="addlog" novalidate>
+      <div class="field"><label for="ad">Date</label><input id="ad" name="date" type="date" value="${today()}" max="${today()}"><div class="err" data-err="date" hidden></div></div>
+      <div class="formgrid">
+        <div class="field"><label for="aw">Weight (kg)</label><input id="aw" name="weight" inputmode="decimal" placeholder="62.4" autocomplete="off"><div class="err" data-err="weight" hidden></div></div>
+        <div class="field"><label for="ab">Blood pressure</label><input id="ab" name="bp" placeholder="110/70" autocomplete="off"><div class="err" data-err="bp" hidden></div></div>
+        <div class="field"><label for="aq">Water intake (glasses)</label><input id="aq" name="water" inputmode="numeric" placeholder="6" autocomplete="off"><div class="err" data-err="water" hidden></div></div>
+        <div class="field"><label for="ak">Baby kicks</label><input id="ak" name="kicks" inputmode="numeric" placeholder="12" autocomplete="off"><div class="err" data-err="kicks" hidden></div></div>
+      </div>
+      <div class="field"><label for="as">Symptom</label><input id="as" name="symptom" placeholder="e.g. mild back pain" maxlength="140" autocomplete="off"><div class="err" data-err="symptom" hidden></div></div>
+      <div class="err" data-err="form" hidden></div>
+      <div class="row"><button class="btn pink" type="submit">Save Log</button><button type="button" class="btn soft" data-go="logs">Cancel</button></div>
+    </form>
+    <aside class="sidepanel org"><h2>Clear messages, no surprises</h2><p>Every field is checked before it is saved. If a number looks wrong you get a plain message that says what to fix, and nothing is stored until it is right.</p></aside>
+  </div>`);
+
+const apptRow = (a, i, past) => {
+  const d = parse(a.date), editing = ui.resched === a.id;
+  return `<div class="appt org${past ? ' past' : ''}">
+    <div class="dbadge c${i % 3}"><small>${d.toLocaleDateString(undefined, { month: 'short' })}</small><b>${pad(d.getDate())}</b></div>
+    <div class="ainfo"><h3>${esc(a.title)}</h3><p>${fmtT(a.time)}${a.who ? ' &middot; ' + esc(a.who) : ''}${a.note ? ' &middot; ' + esc(a.note) : ''}</p></div>
+    <div class="aact"><button class="link" data-act="resched" data-id="${esc(a.id)}">Reschedule</button><button class="link del" data-act="del-appt" data-id="${esc(a.id)}">Delete</button></div>
+    ${editing ? `<form class="resched" data-form="resched" data-id="${esc(a.id)}" novalidate>
+      <div class="field"><label for="rd">New date</label><input id="rd" name="date" type="date" min="${today()}" value="${esc(a.date)}"><div class="err" data-err="date" hidden></div></div>
+      <div class="field"><label for="rt">New time</label><input id="rt" name="time" type="time" value="${esc(a.time)}"><div class="err" data-err="time" hidden></div></div>
+      <button class="btn pink" type="submit">Save</button><button type="button" class="btn soft" data-act="resched-cancel">Cancel</button></form>` : ''}
+  </div>`;
+};
+const apptsView = () => {
+  const u = me(), up = u.appts.filter(a => a.date >= today()).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+  const past = u.appts.filter(a => a.date < today()).sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+  return shell('appts', `
+    <div class="pagehead org"><div><h1>Appointment Manager</h1><p class="sub">Checkups, ultrasounds and vaccines in one list.</p></div><button class="btn pink" data-act="toggle-appt">${ui.addAppt ? 'Close' : '+ Add Appointment'}</button></div>
+    ${ui.addAppt ? `<form class="card form org" data-form="appt" novalidate>
+      <h2>New appointment</h2>
+      <div class="formgrid">
+        <div class="field"><label for="pt">Title</label><input id="pt" name="title" maxlength="60" placeholder="Prenatal Checkup"><div class="err" data-err="title" hidden></div></div>
+        <div class="field"><label for="pd">Date</label><input id="pd" name="date" type="date" min="${today()}"><div class="err" data-err="date" hidden></div></div>
+        <div class="field"><label for="pm">Time</label><input id="pm" name="time" type="time" value="09:00"><div class="err" data-err="time" hidden></div></div>
+        <div class="field"><label for="pw">With (doctor or clinic)</label><input id="pw" name="who" maxlength="40" placeholder="Dr. Reyes"></div>
+      </div>
+      <div class="field"><label for="pn">Reminder</label><input id="pn" name="note" maxlength="80" placeholder="Bring your lab results"></div>
+      <div class="row"><button class="btn pink" type="submit">Save appointment</button></div>
+    </form>` : ''}
+    <div class="alist">${up.length ? up.map((a, i) => apptRow(a, i, false)).join('') : `<p class="empty org">No upcoming appointments. Add one to get started.</p>`}</div>
+    ${past.length ? `<h2 class="org" style="margin-top:8px">Past</h2><div class="alist">${past.map((a, i) => apptRow(a, i, true)).join('')}</div>` : ''}`);
+};
+
+const tipsView = () => {
+  const u = me(), p = preg(u.lmp), cw = Math.min(Math.max(p.week, 4), 40);
+  const w = Math.min(Math.max(ui.tipWeek || cw, 4), 40);
+  const start = Math.min(Math.max(w - 2, 4), 36), weeks = [0, 1, 2, 3, 4].map(i => start + i);
+  const tri = w <= 13 ? 1 : w <= 27 ? 2 : 3, ft = fruit(w), ms = mile(w);
+  return shell('tips', `
+    <div class="pagehead org"><div><h1>Weekly Baby Development</h1><p class="sub">${w === cw ? 'This is your current week.' : `You are in week ${cw}.`}</p></div></div>
+    <div class="wtabs org" role="group" aria-label="Pick a week">${weeks.map(n => `<button data-week="${n}" aria-pressed="${n === w}">Week ${n}</button>`).join('')}</div>
+    <div class="tgrid">
+      <section class="card grad tgrad org"><span class="cap">What&rsquo;s new this week</span><div class="big">${esc(ft)}</div><p>Your baby is about the size of ${withArticle(ft)}. ${esc(ms[0])}.</p><p class="meta">Trimester ${tri} &middot; Week ${w} of 40</p></section>
+      <section class="card org"><h2>Milestones this week</h2><ul class="ul">${ms.map(m => `<li>${esc(m)}</li>`).join('')}</ul></section>
+    </div>
+    <section class="card mint org"><h3>Tips for you</h3><ul class="ul">${tips(w, tri).map(t => `<li>${esc(t)}</li>`).join('')}</ul></section>`);
+};
+
+const alertsView = () => {
+  const u = me(), al = alertsFor(u), st = status(al);
+  const head = st === 'ok' ? ['All values normal', 'Your latest logs are within healthy ranges. Keep logging to stay on top of changes.'] : st === 'watch' ? ['A few things to watch', 'Read the notes below and contact your care provider if you are unsure.'] : ['Please get help today', 'Something you logged needs attention from a care provider.'];
+  return shell('alerts', `
+    <div class="pagehead org"><div><h1>Health Alerts</h1><p class="sub">Based on what you logged recently.</p></div></div>
+    <section class="card acard ${st} org"><span class="cap">Overall</span><h2>${head[0]}</h2><p>${head[1]}</p></section>
+    ${al.length ? `<div class="stack org" style="display:flex;flex-direction:column;gap:10px">${al.map(a => `<div class="arow ${a.lv}"><div><h3>${esc(a.title)}</h3><p>${esc(a.text)}</p></div></div>`).join('')}</div>` : ''}
+    <section class="card org"><h2>When to call</h2>
+      <p class="muted" style="margin-top:8px">Call your care provider or go to urgent care for vaginal bleeding, a severe headache that will not go away, vision changes, sudden swelling of the face or hands, leaking fluid, regular contractions before 37 weeks, a clear drop in your baby&rsquo;s movement, fever, or severe belly pain.</p>
+      <p class="muted" style="margin-top:8px">Call emergency services for chest pain, trouble breathing, a seizure or heavy bleeding.</p>
+      <p class="hint" style="margin-top:10px">G SPOT gives general information and is not medical advice.</p>
+    </section>`);
+};
+
+const familyView = (u, previewing) => {
+  const m = previewing ? u : DB.users[u.follows];
+  const top = previewing
+    ? `<button class="btn soft" data-go="profile">Back to profile</button>`
+    : `<button class="logout" data-act="logout">Logout</button>`;
+  if (!m) return `<div class="ftop"><span class="logo">G SPOT</span><span class="vbadge">Viewing &middot; Partner / Family</span>${top}</div><main class="fmain"><h1>Account not found</h1><p class="note">The account you follow is no longer available.</p></main>`;
+  if (m.mode === 'cycle') return `<div class="ftop"><span class="logo">G SPOT</span>${top}</div><main class="fmain"><h1>Not available</h1><p class="note">This account is no longer tracking a pregnancy.</p></main>`;
+  const p = preg(m.lmp), ups = m.appts.filter(a => a.date >= today()).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time)).slice(0, 4), ms = mile(p.week);
+  return `<div class="ftop"><span class="logo">G SPOT</span><span class="vbadge">Viewing &middot; Partner / Family</span>${top}</div>
+  <main class="fmain">
+    <h1 class="org">${esc(first(m.name))}&rsquo;s Pregnancy Updates</h1>
+    <div class="fgrid">
+      <section class="card grad fgrad org"><span class="cap">This week</span><div class="big">Week ${p.week > 42 ? '40+' : p.week} &middot; ${esc(fruit(p.week))}</div><p>${esc(ms.slice(0, 3).join('. '))}.</p></section>
+      <section class="card org"><span class="cap" style="color:var(--violet)">Upcoming appointments</span>
+        ${ups.length ? `<ul class="mini-list">${ups.map(a => `<li><span><b>${fmt(a.date, MD)}</b> &nbsp;${esc(a.title)}</span><span>${fmtT(a.time)}</span></li>`).join('')}</ul>` : `<p class="empty">Nothing scheduled right now.</p>`}
+      </section>
+    </div>
+    <p class="note org">You can view updates only. Editing and deleting records is available to the mother.</p>
+  </main>`;
+};
+
+/* ---------- daily log, cycle engine, charts ---------- */
+const SYMS = ['Cramps', 'Headache', 'Bloating', 'Fatigue', 'Cravings', 'Acne', 'Backache', 'Tender breasts'];
+const PSYMS = ['Nausea', 'Heartburn', 'Back pain', 'Fatigue', 'Swelling', 'Headache', 'Cravings', 'Leg cramps'];
+const ALL_SYMS = SYMS.concat(PSYMS.filter(s => !SYMS.includes(s)));
+const MOODS = ['Radiant', 'Calm', 'Low', 'Irritable', 'Anxious'];
+const ACTS = [['prot', 'Protected sex'], ['unprot', 'Unprotected sex'], ['oral', 'Oral sex'], ['anal', 'Anal sex'], ['solo', 'Masturbation'], ['org', 'Orgasm'], ['oth', 'Other']];
+const ACT_IDS = ACTS.map(a => a[0]);
+const PARTNERED = ['prot', 'unprot', 'oral', 'anal', 'oth'];
+const DRIVES = ['Low', 'Medium', 'High'];
+const TAGS = [['pill', 'Birth control pill taken'], ['ovp', 'Ovulation test positive'], ['ovn', 'Ovulation test negative'], ['ptp', 'Pregnancy test positive'], ['ptn', 'Pregnancy test negative']];
+const TAG_IDS = TAGS.map(a => a[0]);
+const TAG_EXCL = { ovp: 'ovn', ovn: 'ovp', ptp: 'ptn', ptn: 'ptp' };
+const FLOW = [{ k: 0, l: 'None' }, { k: 1, l: 'Spotting' }, { k: 2, l: 'Light' }, { k: 3, l: 'Medium' }, { k: 4, l: 'Heavy' }];
+const FLOW_AX = ['', 'Spot', 'Light', 'Med', 'Heavy'];
+const DROP = 'M12 2.6c3.7 4.5 6.1 7.8 6.1 11.1a6.1 6.1 0 0 1-12.2 0C5.9 10.4 8.3 7.1 12 2.6z';
+const HEART = 'M12 20.5s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.8a4.3 4.3 0 0 1 7.5 2.7c0 5.4-7.5 10-7.5 10z';
+const PH = {
+  men: { name: 'Menstrual', v: '--pink', tip: 'Bleeding days. Warmth, rest and iron-rich food are common comforts. Logging flow each day sharpens your predictions.' },
+  fol: { name: 'Follicular', v: '--teal', tip: 'Estrogen climbs and energy often rises. Many people find this a good stretch for harder workouts and new projects.' },
+  ovu: { name: 'Ovulation', v: '--amber', tip: 'An egg is released around now, and cervical fluid is often clearer and stretchier. This is the peak of the fertile window.' },
+  lut: { name: 'Luteal', v: '--violet', tip: 'Progesterone rises. Bloating, cravings and tender breasts show up for many people in the week before a period.' }
+};
+const PH_ORDER = ['men', 'fol', 'ovu', 'lut'];
+const clampI = (n, a, b) => { n = Number(n); if (!isFinite(n)) return a; return Math.min(b, Math.max(a, Math.round(n))); };
+const nnum = (x, lo, hi) => { if (x === null || x === '' || x === undefined) return null; const n = Number(x); return isFinite(n) && n >= lo && n <= hi ? n : null; };
+const keepIn = (a, list) => (Array.isArray(a) ? a : []).filter((v, i, s) => list.includes(v) && s.indexOf(v) === i);
+const uniqSort = a => a.filter((v, i) => a.indexOf(v) === i).sort();
+const defaultPrefs = () => ({ tu: 'C', wu: 'kg', discreet: false, heads: true, contra: 'none' });
+const normPrefs = p => { p = p && typeof p === 'object' ? p : {}; return { tu: p.tu === 'F' ? 'F' : 'C', wu: p.wu === 'lb' ? 'lb' : 'kg', discreet: p.discreet === true, heads: p.heads !== false, contra: ['none', 'pill', 'condom', 'iud', 'other'].includes(p.contra) ? p.contra : 'none' }; };
+const cleanDay = e => {
+  e = e && typeof e === 'object' ? e : {};
+  return {
+    flow: clampI(e.flow || 0, 0, 4), sx: keepIn(e.sx, ALL_SYMS), mood: MOODS.includes(e.mood) ? e.mood : '',
+    note: typeof e.note === 'string' ? e.note.slice(0, 500) : '', act: keepIn(e.act, ACT_IDS), drive: DRIVES.includes(e.drive) ? e.drive : '',
+    tags: keepIn(e.tags, TAG_IDS), bbt: nnum(e.bbt, 34, 42), weight: nnum(e.weight, 20, 400), water: clampI(e.water || 0, 0, 20), sleep: nnum(e.sleep, 0, 24)
+  };
+};
+const isEmptyDay = e => !e.flow && !e.sx.length && !e.mood && !e.note.trim() && !e.act.length && !e.drive && !e.tags.length && e.bbt == null && e.weight == null && !e.water && e.sleep == null;
+const dayEntry = (u, k) => cleanDay(u.days && u.days[k]);
+const saveDay = (u, k, e) => { if (!u.days) u.days = {}; if (isEmptyDay(e)) delete u.days[k]; else u.days[k] = e; save(); };
+const normUser = u => {
+  if (!u || typeof u !== 'object') return null;
+  u.name = String(u.name || 'Friend').slice(0, 40);
+  u.logs = (Array.isArray(u.logs) ? u.logs : []).filter(l => l && validDate(l.date) && LOG_TYPES[l.type] && l.value !== undefined);
+  u.appts = (Array.isArray(u.appts) ? u.appts : []).filter(a => a && validDate(a.date) && /^\d{2}:\d{2}$/.test(a.time || ''));
+  u.prefs = normPrefs(u.prefs);
+  u.pin = typeof u.pin === 'string' && /^[0-9a-f]{16}$/.test(u.pin) ? u.pin : null;
+  if (u.role === 'family') return u;
+  u.role = 'mother';
+  u.mode = u.mode === 'cycle' ? 'cycle' : 'pregnant';
+  const days = {};
+  if (u.days && typeof u.days === 'object') Object.keys(u.days).forEach(k => { if (validDate(k)) { const e = cleanDay(u.days[k]); if (!isEmptyDay(e)) days[k] = e; } });
+  u.days = days;
+  if (u.mode === 'cycle') {
+    if (!validDate(u.lastStart)) return null;
+    u.cycle = clampI(u.cycle || 28, 21, 45); u.period = clampI(u.period || 5, 2, 10);
+    u.starts = uniqSort((Array.isArray(u.starts) ? u.starts : []).filter(s => typeof s === 'string' && validDate(s) && s <= u.lastStart).concat([u.lastStart]));
+  } else if (!validDate(u.lmp)) return null;
+  return u;
+};
+
+/* cycle engine (per user) */
+const cparams = u => { const L = u.cycle, P = Math.min(u.period, L - 10); return { L, P, ov: Math.max(L - 14, P + 3) }; };
+const cday = (u, k) => { const L = u.cycle, diff = dnum(k) - dnum(u.lastStart); return ((diff % L) + L) % L + 1; };
+const phaseOf = (u, d) => { const q = cparams(u); return d <= q.P ? 'men' : d <= q.ov - 2 ? 'fol' : d <= q.ov + 1 ? 'ovu' : 'lut'; };
+const fertileD = (u, d) => { const ov = cparams(u).ov; return d >= ov - 5 && d <= ov + 1; };
+const chanceOf = (u, d) => { const o = d - cparams(u).ov; if (o === -1 || o === 0) return 'Very high'; if (o === -2 || o === -3) return 'High'; if (o === -4 || o === -5 || o === 1) return 'Medium'; return 'Low'; };
+const CHANCE_C = { 'Very high': '--pink', High: '--amber', Medium: '--amber', Low: '--teal' };
+const lastUnprot = u => {
+  const t = dnum(today()); let best = null;
+  Object.keys(u.days || {}).forEach(k => { if (u.days[k].act.includes('unprot') && dnum(k) <= t && (!best || k > best)) best = k; });
+  return best;
+};
+const dropSVG = (k, size) => {
+  if (!k) return '<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 12h10" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" fill="none"/></svg>';
+  const s = size || [0, 12, 16, 20, 25][k];
+  return `<svg width="${s}" height="${s}" viewBox="0 0 24 24" aria-hidden="true"><path d="${DROP}" fill="var(--pink)"/></svg>`;
+};
+const heartSVG = un => un
+  ? `<svg width="11" height="11" viewBox="0 0 24 24" aria-hidden="true"><path d="${HEART}" fill="var(--pink)"/></svg>`
+  : `<svg width="11" height="11" viewBox="0 0 24 24" aria-hidden="true"><path d="${HEART}" fill="none" stroke="var(--teal)" stroke-width="3"/></svg>`;
+const toT = (u, c) => u.prefs.tu === 'F' ? c * 9 / 5 + 32 : c;
+const fromT = (u, v) => u.prefs.tu === 'F' ? (v - 32) * 5 / 9 : v;
+const toW = (u, kg) => u.prefs.wu === 'lb' ? kg * 2.20462 : kg;
+const fromW = (u, v) => u.prefs.wu === 'lb' ? v / 2.20462 : v;
+const r2 = n => Math.round(n * 100) / 100, r1 = n => Math.round(n * 10) / 10;
+
+/* chart builders */
+const wave = a => { let p = `M0 0 q40 ${-a} 80 0`; for (let i = 0; i < 8; i++) p += ' t80 0'; return p + ' V400 H0 Z'; };
+const wheelHTML = u => {
+  const q = cparams(u), L = q.L, P = q.P, ov = q.ov, t = today(), d = cday(u, t), ph = phaseOf(u, d);
+  const seg = [['men', 1, P], ['fol', P + 1, ov - 2], ['ovu', ov - 1, ov + 1], ['lut', ov + 2, L]], gap = 9, R = 138;
+  const arcs = seg.map(s => {
+    const st = (s[1] - 1) / L * 360, len = (s[2] - s[1] + 1) / L * 360;
+    return `<circle class="arc" cx="160" cy="160" r="${R}" pathLength="360" transform="rotate(-90 160 160)" stroke-dasharray="${(len - gap).toFixed(2)} 360" stroke-dashoffset="${(-(st + gap / 2)).toFixed(2)}" style="stroke:var(${PH[s[0]].v});opacity:${s[0] === ph ? 1 : 0.3}"/>`;
+  }).join('');
+  const a = ((d - 0.5) / L * 360 - 90) * Math.PI / 180, mx = 160 + R * Math.cos(a), my = 160 + R * Math.sin(a), level = 160 + 112 - (d / L) * 224;
+  return `<div class="wheel" style="--ph:var(${PH[ph].v})"><svg viewBox="0 0 320 320" role="img" aria-label="Cycle wheel: day ${d} of ${L}, ${PH[ph].name} phase">
+    <defs><clipPath id="wdisc"><circle cx="160" cy="160" r="112"/></clipPath></defs>
+    <circle class="disc" cx="160" cy="160" r="112"/>
+    <g clip-path="url(#wdisc)"><g transform="translate(-60,${(level + 6).toFixed(1)})"><g class="wave w2"><path class="liq2" d="${wave(9)}"/></g></g><g transform="translate(0,${level.toFixed(1)})"><g class="wave w1"><path class="liq1" d="${wave(8)}"/></g></g></g>
+    ${arcs}<circle class="marker" cx="${mx.toFixed(1)}" cy="${my.toFixed(1)}" r="11"/></svg>
+    <div class="wheel-center"><span class="lbl">Cycle day</span><span class="num">${d}</span><span class="phn">${PH[ph].name}</span></div></div>`;
+};
+const flowChartHTML = u => {
+  const t = today(), days = []; for (let i = 13; i >= 0; i--) days.push(add(t, -i));
+  const W = 360, H = 190, left = 40, right = 6, top = 12, bottom = 30, pw = W - left - right, ph = H - top - bottom, slot = pw / 14, bw = slot * 0.6;
+  const y = lv => top + ph - lv / 4 * ph;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Bar chart of logged flow for the last 14 days">`, any = false;
+  for (let lv = 1; lv <= 4; lv++) s += `<line class="grid-l" x1="${left}" x2="${W - right}" y1="${y(lv).toFixed(1)}" y2="${y(lv).toFixed(1)}"/><text class="ax" x="${left - 8}" y="${(y(lv) + 3).toFixed(1)}" text-anchor="end">${FLOW_AX[lv]}</text>`;
+  days.forEach((k, i) => {
+    const e = u.days[k], f = e ? e.flow || 0 : 0, cx = left + i * slot + slot / 2;
+    if (f > 0) { any = true; const h = ph * f / 4; s += `<rect class="cbar" x="${(cx - bw / 2).toFixed(1)}" y="${(top + ph - h).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="3"/>`; }
+    else s += `<circle class="nodot" cx="${cx.toFixed(1)}" cy="${top + ph - 2}" r="2"/>`;
+    s += `<text class="ax${k === t ? ' now' : ''}" x="${cx.toFixed(1)}" y="${H - 10}" text-anchor="middle">${parse(k).getDate()}</text>`;
+  });
+  return `<div class="chartsvg">${s}</svg></div>${any ? '' : '<p class="muted" style="margin-top:8px">No flow logged in the last 14 days.</p>'}`;
+};
+const lineChart = (vals, o) => {
+  const nums = vals.filter(v => v != null);
+  if (!nums.length) return `<p class="muted">${o.empty}</p>`;
+  const W = 360, H = 180, l = 40, r = 10, t = 12, b = 26, pw = W - l - r, ph = H - t - b, n = vals.length;
+  let mn = Math.min(...nums), mx = Math.max(...nums); const pd = Math.max((mx - mn) * 0.3, o.minPad); mn -= pd; mx += pd;
+  const x = i => l + i / (n - 1) * pw, y = v => t + ph - (v - mn) / (mx - mn) * ph;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.label}">`;
+  for (let g = 0; g < 3; g++) { const v = mn + (mx - mn) * g / 2; s += `<line class="grid-l" x1="${l}" x2="${W - r}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"/><text class="ax" x="${l - 6}" y="${(y(v) + 3).toFixed(1)}" text-anchor="end">${v.toFixed(1)}</text>`; }
+  (o.marks || []).forEach(i => { s += `<line x1="${x(i).toFixed(1)}" x2="${x(i).toFixed(1)}" y1="${t}" y2="${t + ph}" stroke="var(--amber)" stroke-width="1.5" stroke-dasharray="3 3"/>`; });
+  let d = '', pen = false, lastI = -1;
+  vals.forEach((v, i) => { if (v == null) { pen = false; return; } d += `${pen ? 'L' : 'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)} `; pen = true; lastI = i; });
+  s += `<path d="${d}" fill="none" stroke="var(${o.color})" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+  vals.forEach((v, i) => { if (v != null) s += `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${i === lastI ? 4.5 : 2.5}" fill="var(${o.color})"/>`; });
+  [0, Math.floor((n - 1) / 2), n - 1].forEach((i, j) => { s += `<text class="ax" x="${x(i).toFixed(1)}" y="${H - 8}" text-anchor="${j === 0 ? 'start' : j === 2 ? 'end' : 'middle'}">${o.xl(i)}</text>`; });
+  return `<div class="chartsvg">${s}</svg></div>`;
+};
+const miniBars = (days, get, max, color) => `<div class="mini">${days.map(k => {
+  const v = get(k), h = v == null ? 0 : Math.min(100, v / max * 100);
+  return `<div class="mcol"><span class="mv">${v == null ? '' : v}</span><i style="--c:var(${color});height:${v == null ? 3 : h * 0.62}px;${v == null ? 'opacity:.25' : ''}"></i><span class="md">${fmt(k, { weekday: 'narrow' })}</span></div>`;
+}).join('')}</div>`;
+const lensList = u => {
+  const st = u.starts || [], out = [];
+  for (let i = 1; i < st.length; i++) out.push({ len: dnum(st[i]) - dnum(st[i - 1]), start: st[i - 1] });
+  return out.filter(x => x.len >= 10 && x.len <= 90).slice(-6);
+};
+const histHTML = u => {
+  const lens = lensList(u);
+  if (!lens.length) return `<p class="para" style="margin-top:10px">Log the first day of at least two periods and your cycle lengths show up here.</p>`;
+  let sum = 0, mn = 999, mx = 0; lens.forEach(x => { sum += x.len; mn = Math.min(mn, x.len); mx = Math.max(mx, x.len); });
+  const avg = sum / lens.length, W = 360, H = 190, l = 30, r = 8, t = 16, b = 28, pw = W - l - r, ph = H - t - b;
+  const top = Math.ceil((mx + 1) / 10) * 10, n = lens.length, slot = pw / n, bw = Math.min(40, slot * 0.6), y = v => t + ph - v / top * ph;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Bar chart of your last ${n} cycle lengths in days, average ${avg.toFixed(1)}">`;
+  for (let g = 0; g <= top; g += 10) s += `<line class="grid-l" x1="${l}" x2="${W - r}" y1="${y(g).toFixed(1)}" y2="${y(g).toFixed(1)}"/><text class="ax" x="${l - 6}" y="${(y(g) + 3).toFixed(1)}" text-anchor="end">${g}</text>`;
+  lens.forEach((x, i) => {
+    const cx = l + i * slot + slot / 2, yy = y(x.len);
+    s += `<rect class="cbar" x="${(cx - bw / 2).toFixed(1)}" y="${yy.toFixed(1)}" width="${bw.toFixed(1)}" height="${(t + ph - yy).toFixed(1)}" rx="4"/><text class="ax now" x="${cx.toFixed(1)}" y="${(yy - 5).toFixed(1)}" text-anchor="middle">${x.len}</text><text class="ax" x="${cx.toFixed(1)}" y="${H - 10}" text-anchor="middle">${fmt(x.start, MD)}</text>`;
+  });
+  s += `<line x1="${l}" x2="${W - r}" y1="${y(avg).toFixed(1)}" y2="${y(avg).toFixed(1)}" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="4 3"/></svg>`;
+  const ra = Math.round(avg);
+  return `<div class="chartsvg" style="margin-top:10px">${s}</div><p class="para" style="margin-top:8px">Average ${avg.toFixed(1)} days, shortest ${mn}, longest ${mx}. Cycle lengths that vary by up to about 7 days are common.</p>` +
+    (ra >= 21 && ra <= 45 && ra !== u.cycle ? `<div class="row" style="margin-top:10px"><button class="btn soft" data-act="use-avg" data-v="${ra}">Use ${ra} days as my cycle length</button></div>` : '');
+};
+const sxPhaseHTML = u => {
+  const counts = {};
+  Object.keys(u.days).forEach(k => { const ph = phaseOf(u, cday(u, k)); u.days[k].sx.forEach(s => { if (!counts[s]) counts[s] = { men: 0, fol: 0, ovu: 0, lut: 0, tot: 0 }; counts[s][ph]++; counts[s].tot++; }); });
+  const names = Object.keys(counts).sort((a, b) => counts[b].tot - counts[a].tot).slice(0, 6);
+  if (!names.length) return `<p class="para" style="margin-top:10px">Log symptoms for a few days and patterns by cycle phase show up here.</p>`;
+  const max = counts[names[0]].tot;
+  return `<ul class="legend tight">${PH_ORDER.map(p => `<li><span class="sw" style="background:var(${PH[p].v})"></span>${PH[p].name}</li>`).join('')}</ul><ul class="sx-list">${names.map(s => {
+    const c = counts[s], segs = PH_ORDER.map(p => c[p] ? `<i style="--c:var(${PH[p].v});width:${(c[p] / max * 100).toFixed(1)}%"></i>` : '').join('');
+    return `<li class="sx-row"><span>${esc(s)}</span><div class="track" role="img" aria-label="${esc(s)}: ${PH_ORDER.map(p => c[p] + ' ' + PH[p].name).join(', ')}">${segs}</div><span class="tot">${c.tot}</span></li>`;
+  }).join('')}</ul>`;
+};
+const topSymHTML = u => {
+  const t = dnum(today()), counts = {};
+  Object.keys(u.days).forEach(k => { if (t - dnum(k) <= 30 && dnum(k) <= t) u.days[k].sx.forEach(s => { counts[s] = (counts[s] || 0) + 1; }); });
+  const names = Object.keys(counts).sort((a, b) => counts[b] - counts[a]).slice(0, 6);
+  if (!names.length) return `<p class="para" style="margin-top:10px">Log symptoms on the calendar and your most common ones show up here.</p>`;
+  const max = counts[names[0]];
+  return `<ul class="sx-list">${names.map(s => `<li class="sx-row"><span>${esc(s)}</span><div class="track" role="img" aria-label="${esc(s)}: ${counts[s]} days"><i style="--c:var(--pink);width:${(counts[s] / max * 100).toFixed(1)}%"></i></div><span class="tot">${counts[s]}</span></li>`).join('')}</ul>`;
+};
+const sexualHTML = (u, preg) => {
+  const t = today(), cnt = { prot: 0, unprot: 0, oral: 0, anal: 0, solo: 0 };
+  for (let i = 0; i < 30; i++) { const e = u.days[add(t, -i)]; if (e) Object.keys(cnt).forEach(a => { if (e.act.includes(a)) cnt[a]++; }); }
+  const rows = [['Protected sex', cnt.prot], ['Unprotected sex', cnt.unprot], ['Oral sex', cnt.oral], ['Anal sex', cnt.anal], ['Masturbation', cnt.solo]];
+  let notes = '';
+  const last = lastUnprot(u);
+  if (last && !preg) {
+    const ago = dnum(t) - dnum(last), lvl = chanceOf(u, cday(u, last));
+    notes += `<div class="callout"><h3>Last unprotected sex: ${fmt(last, SHORT)}</h3><p>Estimated chance of pregnancy that day: <strong>${lvl.toLowerCase()}</strong>. This is an estimate from your cycle dates, not a guarantee either way.</p>`;
+    if (ago <= 5) notes += `<p>Timing matters. Emergency contraception lowers the chance of pregnancy: levonorgestrel pills work best within 3 days, ulipristal pills work up to 5 days, and a copper IUD fitted by a clinic works up to 5 days. A pharmacist can help you choose.</p>`;
+    if (ago <= 3) notes += `<p>If you may have been exposed to HIV in the last 72 hours, ask an urgent care or emergency service about PEP. It has to be started within that window.</p>`;
+    notes += `<p>Some infections take days or weeks to show up on a test, so ask a clinic when to test.</p></div>`;
+  } else if (last && preg) {
+    notes += `<div class="callout"><h3>Last unprotected sex: ${fmt(last, SHORT)}</h3><p>Infections can affect pregnancy. If you or a partner may have been exposed, talk to your care provider about testing and treatment.</p></div>`;
+  } else notes += `<p class="para">No unprotected sex logged.</p>`;
+  notes += `<p class="para">Condoms and dental dams lower the risk of infection for vaginal, oral and anal sex. Many clinics suggest an STI check at least once a year and after a new partner. Oral and anal sex can pass on infections, and throat or rectal infections often have no symptoms.</p>`;
+  return `<h2>Sexual health</h2><dl class="kv">${rows.map(r => `<div><dt>${r[0]}</dt><dd>${plural(r[1], 'day')} <span class="muted" style="font-weight:500;font-size:12px">last 30 days</span></dd></div>`).join('')}</dl><div class="stackc" style="margin-top:14px">${notes}</div>`;
+};
+
+/* learn content */
+const ARTICLES = [
+  ['Pregnancy', 'Counting baby kicks', ['From about week 28, many providers suggest paying attention to your baby’s movements every day. One common way is to pick a time when your baby is usually active and note how long it takes to feel 10 movements, which is often within 2 hours.', 'If movement slows clearly or you cannot reach 10, contact your care provider the same day.']],
+  ['Pregnancy', 'Sex during pregnancy', ['For most healthy pregnancies sex is safe throughout, though comfortable positions change as your belly grows. Ask your provider first if you have bleeding, a low-lying placenta, leaking fluid or a history of early labor.', 'Infections can affect pregnancy, so protection still matters with a new partner or if either partner may have an infection.']],
+  ['Pregnancy', 'Your prenatal visit schedule', ['For a low-risk pregnancy a common pattern is a visit about once a month until week 28, every 2 weeks until week 36, then weekly until birth. Your provider may change this for your situation.', 'Keep your appointments in G SPOT so you can bring your logs and lab results each time.']],
+  ['Cycle', 'The four phases of your cycle', ['Your cycle starts on the first day of bleeding. The menstrual phase is the bleed itself, usually 3 to 7 days.', 'In the follicular phase an egg matures and estrogen rises. Ovulation is when the egg is released, and it lasts about a day. In the luteal phase progesterone rises, and if there is no pregnancy hormone levels fall and the next period begins.']],
+  ['Fertility', 'Your fertile window', ['Sperm can survive up to 5 days inside the body, and an egg lives about 12 to 24 hours after ovulation. That makes the fertile window about 6 days, ending on the day of ovulation.', 'G SPOT estimates ovulation from your cycle length. Ovulation can move from month to month, so the window is a guide and tracking dates is not a way to prevent pregnancy.']],
+  ['Sex', 'Protected and unprotected sex', ['Condoms used correctly every time lower the chance of pregnancy and of many infections. Unprotected vaginal sex can lead to pregnancy on any day, with the highest chance in the fertile window.', 'Birth control pills, IUDs and implants prevent pregnancy but do not protect against infections. Using a condom as well covers both.']],
+  ['Sex', 'Oral and anal sex and infections', ['Oral and anal sex do not cause pregnancy on their own, but they can pass on infections such as chlamydia, gonorrhea, syphilis, herpes and HPV.', 'Throat and rectal infections often have no symptoms, and testing may need a throat or rectal swab, so tell the clinic what kind of sex you have had. Condoms and dental dams lower the risk.']],
+  ['Sex', 'After unprotected sex or a broken condom', ['Emergency contraception works best the sooner you take it. Levonorgestrel pills are meant for the first 3 days, ulipristal pills work up to 5 days, and a copper IUD fitted by a clinic works up to 5 days. A pharmacist can tell you which is suitable.', 'If you may have been exposed to HIV, PEP medicine must be started within 72 hours, so go to urgent care or an emergency service. Ask a clinic when to test for other infections, since some take weeks to show up.']],
+  ['Cycle', 'Reading your basal temperature', ['Take your temperature at the same time every morning before getting up, with a thermometer that shows two decimals. A rise of roughly 0.2 to 0.5 °C (0.4 to 1 °F) that holds for several days shows ovulation has happened.', 'It confirms ovulation after the fact and does not predict it. Illness, alcohol and poor sleep can change a reading.']],
+  ['Sex', 'Sex drive across the cycle', ['Many people notice more desire around ovulation and less in the days before a period, but patterns differ a lot from person to person.', 'Stress, sleep, medicines, relationships and mood all matter too. Logging sex drive for a few cycles shows what is true for you.']],
+  ['Health', 'When to see a doctor about your period', ['See a doctor if your period stops for 3 months and you are not pregnant, if cycles are regularly shorter than 21 days or longer than 35 days, or if bleeding lasts more than 7 days.', 'Also get checked for soaking through a pad or tampon every hour for several hours, pain that stops you from doing normal things, or bleeding between periods or after sex.']]
+];
+const cycDash = () => {
+  const u = me(), q = cparams(u), t = today(), d = cday(u, t), ph = phaseOf(u, d), L = q.L, dn = L - d + 1, nextP = add(t, dn);
+  const off = q.ov - d, ovDate = add(t, off < -1 ? off + L : off), fs = add(ovDate, -5), fe = add(ovDate, 1), ch = chanceOf(u, d);
+  const pills = `<span class="pill" style="--pc:var(${PH[ph].v})"><i></i>${PH[ph].name} phase</span>${fertileD(u, d) ? '<span class="pill" style="--pc:var(--amber)"><i></i>Fertile window</span>' : ''}<span class="pill" style="--pc:var(${CHANCE_C[ch]})"><i></i>Chance of pregnancy: ${ch}</span>`;
+  return shell('dashboard', `
+    ${sampleBanner(u)}
+    <div class="pagehead org"><div><h1>${greet()}, ${esc(first(u.name))}</h1><p class="sub">Here is your cycle summary for today.</p></div><button class="btn pink" data-act="log-today">+ Log today</button></div>
+    <div class="dgrid">
+      <section class="card org" aria-label="Cycle today"><div class="wrapw">${wheelHTML(u)}<div><span class="cap" style="color:var(--violet)">${fmt(t, SHORT)}</span>
+        <h2 class="wbig">${ph === 'men' ? `Period day ${d} of ${q.P}` : `Next period in ${plural(dn, 'day')}`}</h2><p class="muted">Expected around ${fmt(nextP, SHORT)}.</p><div class="pills">${pills}</div><p class="muted tipp">${PH[ph].tip}</p></div></div></section>
+      <section class="card grad org" aria-label="Coming up"><span class="cap">Fertile window</span><div class="big2">${fmt(fs, MD)} to ${fmt(fe, MD)}</div><p class="line">Ovulation expected ${fmt(ovDate, SHORT)}</p><p class="line">Cycle ${L} days &middot; period ${q.P} days</p><p class="line" style="font-weight:500;opacity:.9">Dates are estimates from your cycle length.</p></section>
+      <section class="card org"><div class="card-head"><h2>Flow, last 14 days</h2></div><div style="margin-top:10px">${flowChartHTML(u)}</div></section>
+      <section class="card org" id="heads">${headsHTML(u)}</section>
+    </div>`);
+};
+const headsHTML = u => {
+  const t = today(), q = cparams(u), d = cday(u, t), items = [], dn = q.L - d + 1;
+  if (u.prefs.heads) {
+    if (phaseOf(u, d) !== 'men' && dn <= 3) items.push(['--pink', `Your period is expected in ${plural(dn, 'day')}. Keep supplies close.`]);
+    if (fertileD(u, d)) items.push(['--amber', `You are in your fertile window. Chance of pregnancy today: ${chanceOf(u, d).toLowerCase()}.`]);
+    else { const toF = (q.ov - 5) - d; if (toF > 0 && toF <= 3) items.push(['--amber', `Your fertile window starts in ${plural(toF, 'day')}.`]); }
+    if (u.prefs.contra === 'pill' && !dayEntry(u, t).tags.includes('pill')) items.push(['--violet', 'Birth control pill not logged today.']);
+  }
+  if (!u.prefs.discreet) { const last = lastUnprot(u); if (last && dnum(t) - dnum(last) <= 5) items.push(['--pink', `Unprotected sex logged ${fmt(last, MD)}. Open Insights to see your options.`]); }
+  return `<h2>Heads up</h2>` + (items.length ? `<ul class="mini-list">${items.map(i => `<li style="justify-content:flex-start;gap:12px"><i style="width:10px;height:10px;border-radius:50%;background:var(${i[0]});margin-top:7px;flex:none"></i><span style="color:var(--ink);white-space:normal">${i[1]}</span></li>`).join('')}</ul>` : `<p class="muted" style="margin-top:10px">Nothing needs your attention today.</p>`);
+};
+const chip = (act, v, label, on, dis) => `<button type="button" class="chip" data-act="${act}" data-v="${esc(v)}" aria-pressed="${on}"${dis}>${esc(label)}</button>`;
+const dayPanel = u => {
+  const k = ui.sel, t = today(), future = dnum(k) > dnum(t), dis = future ? ' disabled' : '', cyc = u.mode === 'cycle', e = dayEntry(u, k), disc = u.prefs.discreet;
+  let eyebrow;
+  if (cyc) { const d = cday(u, k); eyebrow = `Cycle day ${d} &middot; ${PH[phaseOf(u, d)].name}`; }
+  else { const n = dnum(k) - dnum(u.lmp); eyebrow = n >= 0 ? `Week ${Math.floor(n / 7) + 1} &middot; day ${n % 7 + 1}` : 'Before your pregnancy'; }
+  const symList = (cyc ? SYMS : PSYMS).concat(e.sx.filter(s => !(cyc ? SYMS : PSYMS).includes(s)));
+  const hide = disc && !ui.revealed;
+  const hint = e.act.includes('unprot')
+    ? `<p class="privnote">${cyc ? 'Unprotected sex can lead to pregnancy and to infections. Open Insights to see what you can do and when timing matters.' : 'Infections can affect pregnancy. If you or a partner may have been exposed, talk to your care provider about testing.'}</p>` : '';
+  let extra = '';
+  if (!cyc) {
+    const ap = u.appts.filter(a => a.date === k), lg = u.logs.filter(l => l.date === k);
+    if (ap.length || lg.length) extra = `<div><span class="cap" style="color:var(--violet)">On this day</span><ul class="mini-list">${ap.map(a => `<li><span>${esc(a.title)}</span><span>${fmtT(a.time)}</span></li>`).join('')}${lg.map(l => `<li><span>${l.type === 'symptom' ? 'Symptom: ' + esc(l.value) : esc(LOG_TYPES[l.type])}</span><span>${l.type === 'symptom' ? '' : esc(unitVal(l))}</span></li>`).join('')}</ul></div>`;
+  }
+  return `<div><p class="cap" style="color:var(--violet)">${eyebrow}</p><h2 style="margin-top:4px">${k === t ? 'Today, ' + fmt(k, MD) : fmt(k, LONGD)}</h2></div>
+    ${future ? '<div class="future">This day has not happened yet. You can still see appointments here, but logging opens on the day.</div>' : ''}
+    ${extra}
+    ${cyc ? `<fieldset><legend>Flow</legend><div class="flows">${FLOW.map(f => `<button type="button" class="flow" data-act="d-flow" data-v="${f.k}" aria-pressed="${e.flow === f.k}"${dis}><span class="ico">${dropSVG(f.k)}</span><span>${f.l}</span></button>`).join('')}</div></fieldset>` : ''}
+    <fieldset><legend>Symptoms</legend><div class="cchips">${symList.map(s => chip('d-sx', s, s, e.sx.includes(s), dis)).join('')}</div></fieldset>
+    <fieldset><legend>Mood</legend><div class="cchips">${MOODS.map(m => chip('d-mood', m, m, e.mood === m, dis)).join('')}</div></fieldset>
+    <fieldset><legend>Intimacy</legend>
+      ${hide ? `<div><button type="button" class="btn soft" data-act="d-reveal">Show intimacy log</button></div>` : `<div class="cchips">${ACTS.map(a => chip('d-act', a[0], a[1], e.act.includes(a[0]), dis)).join('')}</div><p class="sublabel">Sex drive</p><div class="cchips">${DRIVES.map(v => chip('d-drive', v, v, e.drive === v, dis)).join('')}</div>${hint}`}
+    </fieldset>
+    ${cyc ? `<fieldset><legend>Tests and pills</legend><div class="cchips">${TAGS.map(a => chip('d-tag', a[0], a[1], e.tags.includes(a[0]), dis)).join('')}</div></fieldset>` : ''}
+    <div class="field"><label for="note">Note</label><textarea id="note" rows="2" maxlength="500" placeholder="Anything else about this day"${dis}>${esc(e.note)}</textarea></div>
+    <div class="log-actions">${cyc ? `<button type="button" class="btn soft" data-act="d-start"${dis}>Period started this day</button>` : ''}<span class="saved" id="saved" role="status"></span></div>`;
+};
+const calCard = u => {
+  const m = ui.month, y = m.getFullYear(), mo = m.getMonth(), t = today(), cyc = u.mode === 'cycle', disc = u.prefs.discreet;
+  const offset = new Date(y, mo, 1).getDay(), count = new Date(y, mo + 1, 0).getDate(), due = cyc ? null : add(u.lmp, 280);
+  const ov = cyc ? cparams(u).ov : 0;
+  let h = '';
+  for (let i = 0; i < offset; i++) h += '<span></span>';
+  for (let n = 1; n <= count; n++) {
+    const k = key(new Date(y, mo, n)), e = u.days[k];
+    let cls = 'day', mk = '', extra = '';
+    if (cyc) {
+      const d = cday(u, k), ph = phaseOf(u, d);
+      if (ph === 'men') cls += ' pm'; else if (fertileD(u, d)) cls += ' fert';
+      if (e && e.flow) mk += dropSVG(1, 9);
+      if (d === ov) mk += '<span class="ov"></span>';
+      extra = `, cycle day ${d}, ${PH[ph].name}`;
+    } else {
+      const ap = u.appts.filter(a => a.date === k), lg = u.logs.some(l => l.date === k);
+      if (k === due) { cls += ' dueday'; mk += '<span class="du">DUE</span>'; extra = ', due date'; }
+      if (ap.length) { mk += '<span class="ap"></span>'; extra += ', appointment'; }
+      if (lg) mk += '<span class="lg"></span>';
+    }
+    if (e && !disc && e.act.some(a => PARTNERED.includes(a))) { const un = e.act.includes('unprot'); mk += heartSVG(un); extra += un ? ', unprotected sex logged' : ', intimacy logged'; }
+    if (e && (e.sx.length || e.mood || e.note.trim()) && (cyc || !u.logs.some(l => l.date === k))) mk += '<span class="lg"></span>';
+    if (k === t) cls += ' today';
+    if (k === ui.sel) cls += ' sel';
+    h += `<button type="button" class="${cls}" data-act="pick-day" data-v="${k}" aria-label="${fmt(k, LONGD)}${extra}"${k === ui.sel ? ' aria-current="date"' : ''}><span class="n">${n}</span><span class="mk">${mk}</span></button>`;
+  }
+  const chev = d => `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+  let lg = cyc ? `<li><span class="sw m"></span>Period</li><li><span class="sw f"></span>Fertile window</li><li><span class="sw o"></span>Ovulation</li><li>${dropSVG(1, 11)}Flow logged</li>`
+    : `<li><span class="sw a"></span>Appointment</li><li><span class="sw l"></span>Log or note</li><li><span class="sw m"></span>Due date</li>`;
+  if (!disc) lg += `<li>${heartSVG(false)}Intimacy</li><li>${heartSVG(true)}Unprotected sex</li>`;
+  lg += `<li><span class="sw t"></span>Today</li>`;
+  return `<div class="cal-head"><h2>${m.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}</h2><div class="cal-nav"><button type="button" class="btn soft" data-act="cal-today">Today</button><button type="button" class="icon-btn" data-act="cal-prev" aria-label="Previous month">${chev('M15 5l-7 7 7 7')}</button><button type="button" class="icon-btn" data-act="cal-next" aria-label="Next month">${chev('M9 5l7 7-7 7')}</button></div></div>
+    <div class="dow" aria-hidden="true"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div><div class="days">${h}</div><ul class="legend">${lg}</ul>`;
+};
+const calView = () => {
+  const u = me();
+  return shell('calendar', `
+    ${sampleBanner(u)}
+    <div class="pagehead org"><div><h1>Calendar</h1><p class="sub">${u.mode === 'cycle' ? 'Tap a day to log how you feel.' : 'Appointments, logs and how you feel, day by day.'}</p></div></div>
+    <div class="cgrid"><section class="card org" id="calCard">${calCard(u)}</section><section class="card log org" id="dayPanel">${dayPanel(u)}</section></div>`);
+};
+const cycInsights = () => {
+  const u = me(), q = cparams(u), t = today(), d = cday(u, t), L = q.L, dn = L - d + 1, nextP = add(t, dn);
+  const off = q.ov - d, ovDate = add(t, off < -1 ? off + L : off), fs = add(ovDate, -5), fe = add(ovDate, 1);
+  const rows = [['Next period', fmt(nextP, SHORT), 'in ' + plural(dn, 'day')], ['Fertile window', `${fmt(fs, MD)} to ${fmt(fe, MD)}`, ''], ['Ovulation', fmt(ovDate, SHORT), 'estimated'], ['Cycle length', L + ' days', ''], ['Period length', q.P + ' days', '']];
+  return shell('insights', `
+    ${sampleBanner(u)}
+    <div class="pagehead org"><div><h1>Insights</h1><p class="sub">Patterns from what you have logged.</p></div></div>
+    <div class="insgrid"><div class="stackc">
+      <section class="card org"><h2>Coming up</h2><dl class="kv">${rows.map(r => `<div><dt>${r[0]}</dt><dd>${r[1]}${r[2] ? `<span class="muted" style="display:block;font-weight:500;font-size:12.5px">${r[2]}</span>` : ''}</dd></div>`).join('')}</dl></section>
+      <section class="card org"><h2>Cycle history</h2>${histHTML(u)}</section></div>
+    <div class="stackc"><section class="card org"><h2>Symptoms by phase</h2>${sxPhaseHTML(u)}</section>
+      ${u.prefs.discreet ? '' : `<section class="card org">${sexualHTML(u, false)}</section>`}</div></div>`);
+};
+const pregInsights = () => {
+  const u = me(), t = today(), d60 = [], d7 = []; for (let i = 59; i >= 0; i--) d60.push(add(t, -i)); for (let i = 6; i >= 0; i--) d7.push(add(t, -i));
+  const wv = d60.map(k => { const l = u.logs.filter(x => x.type === 'weight' && x.date === k).pop(); return l ? Number(l.value) : null; });
+  const kv = k => { const l = u.logs.filter(x => x.type === 'kicks' && x.date === k).pop(); return l ? Number(l.value) : null; };
+  return shell('insights', `
+    <div class="pagehead org"><div><h1>Insights</h1><p class="sub">Patterns from what you have logged.</p></div></div>
+    <div class="insgrid"><div class="stackc">
+      <section class="card org"><div class="card-head"><h2>Weight trend</h2><span class="cap muted">Last 60 days, kg</span></div>${lineChart(wv, { color: '--violet', minPad: 0.5, xl: i => fmt(d60[i], MD), empty: 'Log your weight on the Health Logs page and the trend shows up here.', label: 'Line chart of weight for the last 60 days' })}</section>
+      <section class="card org"><div class="card-head"><h2>Baby kicks</h2><span class="cap muted">Last 7 days</span></div>${miniBars(d7, kv, 30, '--pink')}</section></div>
+    <div class="stackc"><section class="card org"><h2>Top symptoms</h2><p class="muted" style="font-size:13px;margin-top:2px">Last 30 days, from your calendar.</p>${topSymHTML(u)}</section>
+      ${u.prefs.discreet ? '' : `<section class="card org">${sexualHTML(u, true)}</section>`}</div></div>`);
+};
+const bodyCharts = u => {
+  const t = today(), q = cparams(u), d30 = [], d60 = [], d7 = [];
+  for (let i = 29; i >= 0; i--) d30.push(add(t, -i)); for (let i = 59; i >= 0; i--) d60.push(add(t, -i)); for (let i = 6; i >= 0; i--) d7.push(add(t, -i));
+  const marks = []; d30.forEach((k, j) => { if (cday(u, k) === q.ov) marks.push(j); });
+  return {
+    bbt: lineChart(d30.map(k => { const e = u.days[k]; return e && e.bbt != null ? r2(toT(u, e.bbt)) : null; }), { color: '--pink', minPad: u.prefs.tu === 'F' ? 0.3 : 0.15, marks, xl: j => fmt(d30[j], MD), empty: 'No temperatures logged in the last 30 days.', label: 'Line chart of basal body temperature for the last 30 days' }),
+    wt: lineChart(d60.map(k => { const e = u.days[k]; return e && e.weight != null ? r1(toW(u, e.weight)) : null; }), { color: '--violet', minPad: u.prefs.wu === 'lb' ? 1 : 0.5, xl: j => fmt(d60[j], MD), empty: 'No weight logged in the last 60 days.', label: 'Line chart of weight for the last 60 days' }),
+    water: miniBars(d7, k => { const e = u.days[k]; return e && e.water ? e.water : null; }, 10, '--teal'),
+    sleep: miniBars(d7, k => { const e = u.days[k]; return e && e.sleep != null ? e.sleep : null; }, 10, '--violet')
+  };
+};
+const bodyView = () => {
+  const u = me(), k = ui.sel, t = today(), e = dayEntry(u, k), c = bodyCharts(u), tu = u.prefs.tu, wu = u.prefs.wu;
+  const chev = d => `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+  return shell('body', `
+    ${sampleBanner(u)}
+    <div class="pagehead org"><div><h1>Body</h1><p class="sub">Temperature, weight, sleep and water.</p></div></div>
+    <div class="insgrid"><div class="stackc">
+      <section class="card org"><div class="card-head"><div><span class="cap" style="color:var(--violet)">Daily check-in</span><h2 style="margin-top:4px">${k === t ? 'Today, ' + fmt(k, MD) : fmt(k, LONGD)}</h2></div>
+        <div class="dayswitch"><button type="button" class="icon-btn" data-act="body-prev" aria-label="Previous day">${chev('M15 5l-7 7 7 7')}</button><button type="button" class="icon-btn" data-act="body-next" aria-label="Next day"${k === t ? ' disabled' : ''}>${chev('M9 5l7 7-7 7')}</button></div></div>
+        <div class="fields">
+          <div class="field"><label for="inBbt">Temperature in °${tu}</label><input type="number" id="inBbt" inputmode="decimal" step="0.01" value="${e.bbt == null ? '' : r2(toT(u, e.bbt))}"></div>
+          <div class="field"><label for="inWeight">Weight in ${wu}</label><input type="number" id="inWeight" inputmode="decimal" step="0.1" value="${e.weight == null ? '' : r1(toW(u, e.weight))}"></div>
+          <div class="field"><label for="inSleep">Sleep in hours</label><input type="number" id="inSleep" inputmode="decimal" step="0.5" min="0" max="24" value="${e.sleep == null ? '' : e.sleep}"></div>
+          <div class="field"><span class="lbl" id="lblWater">Water</span><div class="stepper" role="group" aria-labelledby="lblWater"><button type="button" class="icon-btn" data-act="water-" aria-label="One glass less"${e.water <= 0 ? ' disabled' : ''}>&minus;</button><output id="waterOut" aria-live="polite">${e.water} ${e.water === 1 ? 'glass' : 'glasses'}</output><button type="button" class="icon-btn" data-act="water+" aria-label="One glass more"${e.water >= 20 ? ' disabled' : ''}>+</button></div></div>
+        </div><p class="msg" id="bodyMsg" role="status"></p></section>
+      <section class="card org"><h2>Last 7 days</h2><p class="cap muted" style="margin-top:12px">Water, glasses</p><div id="waterBars">${c.water}</div><p class="cap muted" style="margin-top:16px">Sleep, hours</p><div id="sleepBars">${c.sleep}</div></section></div>
+    <div class="stackc"><section class="card org"><div class="card-head"><h2>Basal body temperature</h2><span class="cap muted">Last 30 days</span></div><div class="chartbox" id="bbtChart">${c.bbt}</div><p class="para" style="margin-top:10px">Take it at the same time each morning before you get up. A small rise that stays up for several days usually means ovulation has already happened. Dashed lines mark predicted ovulation.</p></section>
+      <section class="card org"><div class="card-head"><h2>Weight</h2><span class="cap muted">Last 60 days</span></div><div class="chartbox" id="wtChart">${c.wt}</div></section></div></div>`);
+};
+const learnView = () => {
+  const u = me(), order = u.mode === 'pregnant' ? ['Pregnancy', 'Sex', 'Health', 'Cycle', 'Fertility'] : ['Cycle', 'Fertility', 'Sex', 'Health', 'Pregnancy'];
+  const list = ARTICLES.slice().sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]));
+  return shell('learn', `
+    <div class="pagehead org"><div><h1>Learn</h1><p class="sub">Short, plain answers about your cycle, sex, protection and pregnancy. General information only, not medical advice.</p></div></div>
+    <div class="articles">${list.map(a => `<details class="org"><summary><span class="t"><span class="cap">${a[0]}</span><h3>${esc(a[1])}</h3></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><div class="body">${a[2].map(p => `<p>${p}</p>`).join('')}</div></details>`).join('')}</div>`);
+};
+const profileView = () => {
+  const u = me(), cyc = u.mode === 'cycle', P = u.prefs;
+  const account = `<section class="card org"><h2>Account</h2><dl class="kv"><div><dt>Name</dt><dd>${esc(u.name)}</dd></div><div><dt>Username</dt><dd>${esc(DB.session)}</dd></div><div><dt>Tracking</dt><dd>${cyc ? 'My cycle' : 'Pregnancy'}</dd></div></dl></section>`;
+  let main, share = '', modeCard;
+  if (cyc) {
+    main = `<form class="card form org" data-form="cycleset" novalidate><h2>Your cycle</h2>
+      <div class="field"><label for="cs">First day of your last period</label><input id="cs" name="lastStart" type="date" value="${esc(u.lastStart)}" max="${today()}"><div class="err" data-err="lastStart" hidden></div></div>
+      <div class="field"><label for="cl">Cycle length in days</label><input id="cl" name="cycle" type="number" min="21" max="45" inputmode="numeric" value="${u.cycle}"><span class="hint">21 to 45 days.</span><div class="err" data-err="cycle" hidden></div></div>
+      <div class="field"><label for="cp">Period length in days</label><input id="cp" name="period" type="number" min="2" max="10" inputmode="numeric" value="${u.period}"><span class="hint">2 to 10 days.</span><div class="err" data-err="period" hidden></div></div>
+      <button class="btn pink" type="submit" style="align-self:flex-start">Save cycle</button></form>`;
+    modeCard = `<form class="card form org" data-form="topreg" novalidate><h2>Switch to pregnancy</h2><p class="muted" style="font-size:14px">Expecting? Switch to pregnancy tracking for weekly updates, health logs and appointments. Your calendar logs are kept.</p>
+      <div class="field"><label for="tp">First day of your last menstrual period</label><input id="tp" name="lmp" type="date" value="${esc(u.lastStart)}" max="${today()}"><div class="err" data-err="lmp" hidden></div></div>
+      <button class="btn soft" type="submit" style="align-self:flex-start">Switch to pregnancy tracking</button></form>`;
+  } else {
+    const p = preg(u.lmp);
+    main = `<form class="card form org" data-form="lmp" novalidate><h2>Due date calculator</h2>
+      <div class="field"><label for="pl">First day of your last menstrual period</label><input id="pl" name="lmp" type="date" value="${esc(u.lmp)}" max="${today()}"><div class="err" data-err="lmp" hidden></div></div>
+      <button class="btn pink" type="submit" style="align-self:flex-start">Calculate and save</button>
+      <dl class="kv"><div><dt>Due date</dt><dd>${fmt(p.due, LONGD)}</dd></div><div><dt>Current week</dt><dd>Week ${p.week}</dd></div><div><dt>Trimester</dt><dd>${TRI[p.tri]}</dd></div><div><dt>Days to go</dt><dd>${p.left > 0 ? p.left : 'Due now'}</dd></div></dl></form>`;
+    share = `<section class="card org"><h2>Share with family</h2>
+      <p class="muted" style="margin-top:8px">Partners and family sign up as Partner or family and enter your username. They see your week, baby size and appointments, and cannot change anything.</p>
+      <dl class="kv"><div><dt>Your username</dt><dd>${esc(DB.session)}</dd></div></dl>
+      <div class="row" style="margin-top:10px"><button class="btn soft" data-act="copy-user">Copy username</button><button class="btn soft" data-act="preview-family">Preview family view</button></div></section>`;
+    modeCard = `<form class="card form org" data-form="tocycle" novalidate><h2>Back to cycle tracking</h2><p class="muted" style="font-size:14px">No longer pregnant, or want to follow your cycle? Switch back to cycle tracking. Your pregnancy logs and appointments are kept.</p>
+      <div class="field"><label for="tc">First day of your last period</label><input id="tc" name="lastStart" type="date" max="${today()}"><div class="err" data-err="lastStart" hidden></div></div>
+      <button class="btn soft" type="submit" style="align-self:flex-start">Switch to cycle tracking</button></form>`;
+  }
+  const prefs = `<section class="card form org"><h2>Preferences</h2>
+    ${cyc ? `<div class="field"><label for="selContra">Birth control</label><select id="selContra" data-pref="contra"><option value="none">None</option><option value="pill">Pill</option><option value="condom">Condoms</option><option value="iud">IUD or implant</option><option value="other">Something else</option></select><span class="hint">Choosing Pill adds a daily reminder to Today.</span></div>
+    <div class="field"><label for="selTemp">Temperature unit</label><select id="selTemp" data-pref="tu"><option value="C">Celsius</option><option value="F">Fahrenheit</option></select></div>
+    <div class="field"><label for="selWeight">Weight unit</label><select id="selWeight" data-pref="wu"><option value="kg">Kilograms</option><option value="lb">Pounds</option></select></div>
+    <div class="toggle"><input type="checkbox" id="chkHeads" data-pref="heads"${P.heads ? ' checked' : ''}><label for="chkHeads">Show heads-up cards on Today<span class="hint">Period coming, fertile window, pill reminder.</span></label></div>` : ''}
+    <div class="toggle"><input type="checkbox" id="chkDiscreet" data-pref="discreet"${P.discreet ? ' checked' : ''}><label for="chkDiscreet">Discreet mode<span class="hint">Hides intimacy markers on the calendar, collapses the intimacy log until you tap to open it, and hides the Sexual health card.</span></label></div></section>`;
+  const lock = `<section class="card form org"><h2>Privacy lock</h2>
+    <p class="muted" style="font-size:14px">${u.pin ? 'The lock is on. G SPOT asks for your PIN each time you open it.' : 'Turn on a 4 digit PIN so G SPOT asks for it each time you open it.'}</p>
+    ${u.pin ? `<div class="field"><label for="curPw">Your account password</label><input id="curPw" type="password" autocomplete="current-password"><span class="hint">Needed to turn the lock off, so you can still reset it if you forget the PIN.</span></div><div class="row"><button class="btn soft" data-act="pin-off">Turn off lock</button></div>`
+      : `<div class="field"><label for="newPin">Choose a 4 digit PIN</label><input id="newPin" type="password" inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]*"></div><div class="row"><button class="btn pink" data-act="pin-on">Turn on lock</button></div>`}
+    <p class="msg" id="pinMsg" role="status"></p><p class="hint">The lock keeps casual viewers out of the app on this device. It does not encrypt your data.</p></section>`;
+  const data = `<section class="card form org"><h2>Your data</h2>
+    <p class="muted" style="font-size:14px">Everything stays in this browser on this device. Use the backup text to move your data to another device.</p>
+    <div class="field" style="max-width:none"><label for="dataBox">Backup text</label><textarea id="dataBox" class="datatxt" rows="4" spellcheck="false" placeholder="Press Copy my data, or paste backup text here and press Restore."></textarea></div>
+    <div class="row"><button class="btn soft" data-act="copy-data">Copy my data</button><button class="btn soft" data-act="restore-data">Restore from text</button></div>
+    <p class="msg" id="dataMsg" role="status"></p><hr class="sep">
+    <div class="row"><button class="btn soft" data-act="erase-days" style="color:var(--red-ink)">Erase calendar logs</button><button class="btn soft" data-act="delete-account" id="delAcc" style="color:var(--red-ink)">Delete my account</button></div></section>`;
+  return shell('profile', `
+    ${sampleBanner(u)}
+    <div class="pagehead org"><div><h1>My Profile</h1><p class="sub">Your details, settings and privacy.</p></div></div>
+    <div class="pgrid"><div class="stackc">${account}${main}${modeCard}</div><div class="stackc">${share}${prefs}${lock}${data}</div></div>`);
+};
+
+
+const VIEWS = {
+  dashboard: () => me().mode === 'cycle' ? cycDash() : pregDash(), calendar: calView, insights: () => me().mode === 'cycle' ? cycInsights() : pregInsights(),
+  body: bodyView, learn: learnView, profile: profileView, logs: logsView, add: addView, appts: apptsView, tips: tipsView, alerts: alertsView
+};
+const allowed = u => NAV[u.mode].map(i => i[0]).concat(u.mode === 'pregnant' ? ['add', 'family'] : []);
+
+/* ---------- rendering ---------- */
+const render = animate => {
+  const u = me(); let html;
+  if (!u) {
+    if (!['landing', 'login', 'register'].includes(route)) route = 'landing';
+    html = route === 'login' ? loginView() : route === 'register' ? registerView() : landing();
+  } else if (u.role === 'family') { route = 'family'; html = familyView(u, false); }
+  else {
+    if (!allowed(u).includes(route)) route = 'dashboard';
+    html = route === 'family' ? familyView(u, true) : VIEWS[route]();
+  }
+  const y = window.scrollY;
+  root.innerHTML = html;
+  if (animate) { window.scrollTo(0, 0); organize(); } else window.scrollTo(0, y);
+  if (ui.focus) { const n = $(ui.focus); if (n) n.focus(); ui.focus = null; }
+  if (ui.flash) { const s = $('#saved'); if (s) s.textContent = ui.flash; ui.flash = ''; }
+};
+const go = r => { route = r; ui.resched = null; if (r !== 'appts') ui.addAppt = false; if (r === 'body') ui.sel = today(); ui.revealed = false; render(true); };
+
+/* panels organize into place */
+const REDUCE = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+const pr = (i, n) => { const x = Math.sin(i * 97.13 + n * 31.7) * 10000; return x - Math.floor(x); };
+function organize() {
+  if (REDUCE || !Element.prototype.animate || (splashUp)) return;
+  $$('#root .org').forEach((el, i) => {
+    if (!el.getClientRects().length) return;
+    const dx = (pr(i, 1) - 0.5) * 70, dy = 30 + pr(i, 2) * 46, rot = (pr(i, 3) - 0.5) * 8;
+    el.animate([
+      { opacity: 0, transform: `translate(${dx.toFixed(1)}px,${dy.toFixed(1)}px) rotate(${rot.toFixed(2)}deg) scale(.92)` },
+      { opacity: 1, transform: 'none' }
+    ], { duration: 700, delay: 40 + i * 70, easing: 'cubic-bezier(.2,.9,.25,1)', fill: 'backwards' });
+  });
+}
+
+/* ---------- toast ---------- */
+let toastTimer;
+const toast = (msg, undo) => {
+  const t = $('#toast'); clearTimeout(toastTimer);
+  t.innerHTML = `<span>${esc(msg)}</span>${undo ? '<button type="button" id="undoBtn">Undo</button>' : ''}`;
+  t.hidden = false;
+  if (undo) $('#undoBtn').onclick = () => { undo(); t.hidden = true; };
+  toastTimer = setTimeout(() => { t.hidden = true; }, 5000);
+};
+
+/* ---------- form helpers ---------- */
+const showErr = (f, name, msg) => {
+  const e = $(`[data-err="${name}"]`, f), i = f.elements[name];
+  if (e) { e.textContent = msg || ''; e.hidden = !msg; }
+  if (i && i.classList) i.classList.toggle('invalid', !!msg);
+  if (i && i.setAttribute) { if (msg) i.setAttribute('aria-invalid', 'true'); else i.removeAttribute('aria-invalid'); }
+};
+const clearErrs = f => $$('[data-err]', f).forEach(e => showErr(f, e.getAttribute('data-err'), ''));
+const firstInvalid = f => { const i = $('.invalid', f); if (i) i.focus(); };
+
+const handlers = {
+  login(f) {
+    clearErrs(f);
+    const un = f.username.value.trim().toLowerCase(), pw = f.password.value; let bad = false;
+    const u = DB.users[un];
+    if (!un) { showErr(f, 'username', 'Error: please enter your username.'); bad = true; }
+    else if (!u) { showErr(f, 'username', 'Error: that username was not found.'); bad = true; }
+    if (!pw) { showErr(f, 'password', 'Error: please enter your password.'); bad = true; }
+    else if (u && u.hash !== hashPw(pw)) { showErr(f, 'password', 'Error: that password is not right.'); bad = true; }
+    if (bad) return firstInvalid(f);
+    DB.session = un; save(); route = 'dashboard'; render(true);
+  },
+  register(f) {
+    clearErrs(f);
+    const role = f.role.value, name = f.name.value.trim(), un = f.username.value.trim().toLowerCase(), pw = f.password.value; let bad = false;
+    if (!name) { showErr(f, 'name', 'Error: please enter your name.'); bad = true; }
+    if (!/^[a-z0-9_]{3,20}$/.test(un)) { showErr(f, 'username', 'Error: use 3 to 20 letters, numbers or underscores.'); bad = true; }
+    else if (DB.users[un]) { showErr(f, 'username', 'Error: that username is taken.'); bad = true; }
+    if (pw.length < 6) { showErr(f, 'password', 'Error: the password needs at least 6 characters.'); bad = true; }
+    const base = { name, hash: hashPw(pw), logs: [], appts: [], days: {}, prefs: defaultPrefs(), pin: null };
+    let user = null;
+    if (role === 'cycle') {
+      const cs = f.cstart.value, ce = V.date(cs), cl = num(f.clen.value), pl = num(f.plen.value);
+      if (ce) { showErr(f, 'cstart', ce); bad = true; } else if (dnum(today()) - dnum(cs) > 120) { showErr(f, 'cstart', 'Error: that is more than 4 months ago. Enter your most recent period.'); bad = true; }
+      if (isNaN(cl) || cl < 21 || cl > 45 || cl % 1) { showErr(f, 'clen', 'Error: enter 21 to 45 days.'); bad = true; }
+      if (isNaN(pl) || pl < 2 || pl > 10 || pl % 1) { showErr(f, 'plen', 'Error: enter 2 to 10 days.'); bad = true; }
+      if (!bad) user = Object.assign(base, { role: 'mother', mode: 'cycle', lastStart: cs, starts: [cs], cycle: cl, period: pl, lmp: '' });
+    } else if (role === 'mother') {
+      const lmp = f.lmp.value, e = V.lmp(lmp);
+      if (e) { showErr(f, 'lmp', e); bad = true; }
+      if (!bad) user = Object.assign(base, { role: 'mother', mode: 'pregnant', lmp });
+    } else {
+      const fo = f.follows.value.trim().toLowerCase();
+      if (!DB.users[fo] || DB.users[fo].role !== 'mother' || DB.users[fo].mode !== 'pregnant') { showErr(f, 'follows', 'Error: no expecting mother has that username.'); bad = true; }
+      if (!bad) user = Object.assign(base, { role: 'family', mode: 'pregnant', follows: fo });
+    }
+    if (bad) return firstInvalid(f);
+    DB.users[un] = user; DB.session = un; save(); route = 'dashboard'; render(true); toast('Welcome to G SPOT');
+  },
+  quicklog(f) {
+    clearErrs(f);
+    const type = f.type.value, v = f.value.value.trim(), e = V[type](v);
+    if (e) { showErr(f, 'value', e); return firstInvalid(f); }
+    me().logs.push({ id: uid(), date: today(), type, value: norm(type, v) }); save(); render(false); toast('Log saved');
+  },
+  addlog(f) {
+    clearErrs(f);
+    const u = me(), date = f.date.value; let bad = false;
+    const e0 = V.date(date); if (e0) { showErr(f, 'date', e0); bad = true; }
+    const fields = ['weight', 'bp', 'water', 'kicks', 'symptom'], entries = [];
+    fields.forEach(n => { const v = f[n].value.trim(); if (v === '') return; const e = V[n](v); if (e) { showErr(f, n, e); bad = true; } else entries.push({ id: uid(), date, type: n, value: norm(n, v) }); });
+    if (!bad && !entries.length) { showErr(f, 'form', 'Error: fill in at least one field to save a log.'); bad = true; }
+    if (bad) return firstInvalid(f);
+    entries.forEach(x => u.logs.push(x)); save(); go('logs'); toast(`${plural(entries.length, 'log')} saved`);
+  },
+  appt(f) {
+    clearErrs(f);
+    const title = f.title.value.trim(), date = f.date.value, time = f.time.value; let bad = false;
+    if (!title) { showErr(f, 'title', 'Error: please enter a title.'); bad = true; }
+    if (!validDate(date)) { showErr(f, 'date', 'Error: please enter a valid date.'); bad = true; }
+    else if (date < today()) { showErr(f, 'date', 'Error: pick today or a future date.'); bad = true; }
+    if (!/^\d{2}:\d{2}$/.test(time)) { showErr(f, 'time', 'Error: please pick a time.'); bad = true; }
+    if (bad) return firstInvalid(f);
+    me().appts.push({ id: uid(), title, date, time, who: f.who.value.trim(), note: f.note.value.trim() }); ui.addAppt = false; save(); render(false); toast('Appointment saved');
+  },
+  resched(f) {
+    clearErrs(f);
+    const a = me().appts.find(x => x.id === f.getAttribute('data-id')), date = f.date.value, time = f.time.value; let bad = false;
+    if (!validDate(date)) { showErr(f, 'date', 'Error: please enter a valid date.'); bad = true; }
+    else if (date < today()) { showErr(f, 'date', 'Error: pick today or a future date.'); bad = true; }
+    if (!/^\d{2}:\d{2}$/.test(time)) { showErr(f, 'time', 'Error: please pick a time.'); bad = true; }
+    if (bad || !a) return firstInvalid(f);
+    a.date = date; a.time = time; ui.resched = null; save(); render(false); toast('Appointment rescheduled');
+  },
+  lmp(f) {
+    clearErrs(f);
+    const v = f.lmp.value, e = V.lmp(v);
+    if (e) { showErr(f, 'lmp', e); return firstInvalid(f); }
+    me().lmp = v; save(); render(false); toast('Due date updated');
+  },
+  cycleset(f) {
+    clearErrs(f);
+    const u = me(), ls = f.lastStart.value, cl = num(f.cycle.value), pl = num(f.period.value); let bad = false;
+    const e = V.date(ls); if (e) { showErr(f, 'lastStart', e); bad = true; }
+    if (isNaN(cl) || cl < 21 || cl > 45 || cl % 1) { showErr(f, 'cycle', 'Error: cycle length must be 21 to 45 days.'); bad = true; }
+    if (isNaN(pl) || pl < 2 || pl > 10 || pl % 1) { showErr(f, 'period', 'Error: period length must be 2 to 10 days.'); bad = true; }
+    if (bad) return firstInvalid(f);
+    u.starts = uniqSort(u.starts.filter(s => s < ls).concat([ls])); u.lastStart = ls; u.cycle = cl; u.period = pl;
+    save(); render(false); toast('Cycle saved');
+  },
+  topreg(f) {
+    clearErrs(f);
+    const v = f.lmp.value, e = V.lmp(v);
+    if (e) { showErr(f, 'lmp', e); return firstInvalid(f); }
+    const u = me(); u.mode = 'pregnant'; u.lmp = v; save(); route = 'dashboard'; render(true); toast('Switched to pregnancy tracking');
+  },
+  tocycle(f) {
+    clearErrs(f);
+    const v = f.lastStart.value, e = V.date(v);
+    if (e) { showErr(f, 'lastStart', e); return firstInvalid(f); }
+    const u = me(); u.mode = 'cycle'; u.lastStart = v; u.starts = [v]; u.cycle = clampI(u.cycle || 28, 21, 45); u.period = clampI(u.period || 5, 2, 10);
+    save(); route = 'dashboard'; render(true); toast('Switched to cycle tracking');
+  }
+};
+
+
+/* ---------- events ---------- */
+root.addEventListener('submit', e => {
+  const f = e.target.closest('form[data-form]'); if (!f) return;
+  e.preventDefault(); handlers[f.getAttribute('data-form')](f);
+});
+root.addEventListener('change', e => {
+  const t = e.target;
+  if (t.name === 'role') $$('[data-role]', root).forEach(el => { el.hidden = el.getAttribute('data-role') !== t.value; });
+  if (t.id === 'qt') {
+    const v = $('#qv'), ph = { weight: ['Weight (kg)', 'decimal'], bp: ['Blood pressure (110/70)', 'text'], symptom: ['Symptom (e.g. mild back pain)', 'text'], water: ['Glasses of water', 'numeric'], kicks: ['Number of kicks', 'numeric'] }[t.value];
+    v.placeholder = ph[0]; v.setAttribute('inputmode', ph[1]); v.value = ''; showErr(t.form, 'value', '');
+  }
+  if (t.dataset.pref) {
+    const u = me(), k = t.dataset.pref;
+    u.prefs[k] = (k === 'discreet' || k === 'heads') ? t.checked : t.value;
+    u.prefs = normPrefs(u.prefs); if (k === 'discreet') ui.revealed = false;
+    save(); render(false);
+  }
+});
+root.addEventListener('input', e => {
+  const t = e.target, u = me();
+  if (!u) return;
+  if (t.id === 'note') { const en = dayEntry(u, ui.sel); en.note = t.value; saveDay(u, ui.sel, en); const s = $('#saved'); if (s) s.textContent = 'Saved'; return; }
+  const which = { inBbt: 'bbt', inWeight: 'wt', inSleep: 'sleep' }[t.id];
+  if (which) onBodyInput(u, which, t.value.trim());
+});
+const bodyMsg = (t, err) => { const m = $('#bodyMsg'); if (m) { m.className = 'msg' + (err ? ' err' : ''); m.textContent = t; } };
+const onBodyInput = (u, which, raw) => {
+  const e = dayEntry(u, ui.sel), v = raw === '' ? null : Number(raw);
+  if (which === 'bbt') {
+    const c = v == null ? null : fromT(u, v);
+    if (v != null && nnum(c, 34, 42) == null) return bodyMsg(`Enter a temperature between ${r1(toT(u, 34))} and ${r1(toT(u, 42))} °${u.prefs.tu}.`, true);
+    e.bbt = c == null ? null : r2(c);
+  } else if (which === 'wt') {
+    const kg = v == null ? null : fromW(u, v);
+    if (v != null && nnum(kg, 20, 400) == null) return bodyMsg(`Enter a weight between ${Math.round(toW(u, 20))} and ${Math.round(toW(u, 400))} ${u.prefs.wu}.`, true);
+    e.weight = kg == null ? null : Math.round(kg * 100) / 100;
+  } else {
+    if (v != null && nnum(v, 0, 24) == null) return bodyMsg('Sleep must be between 0 and 24 hours.', true);
+    e.sleep = v;
+  }
+  bodyMsg('Saved'); saveDay(u, ui.sel, e);
+  const c = bodyCharts(u); $('#bbtChart').innerHTML = c.bbt; $('#wtChart').innerHTML = c.wt; $('#waterBars').innerHTML = c.water; $('#sleepBars').innerHTML = c.sleep;
+};
+const startOfMonth = k => { const d = parse(k); return new Date(d.getFullYear(), d.getMonth(), 1); };
+const dayAct = (act, v, u) => {
+  const k = ui.sel, e = dayEntry(u, k);
+  if (act === 'd-flow') e.flow = Number(v);
+  else if (act === 'd-sx') { const i = e.sx.indexOf(v); if (i > -1) e.sx.splice(i, 1); else e.sx.push(v); }
+  else if (act === 'd-mood') e.mood = e.mood === v ? '' : v;
+  else if (act === 'd-act') { const i = e.act.indexOf(v); if (i > -1) e.act.splice(i, 1); else e.act.push(v); }
+  else if (act === 'd-drive') e.drive = e.drive === v ? '' : v;
+  else if (act === 'd-tag') { const i = e.tags.indexOf(v); if (i > -1) e.tags.splice(i, 1); else { e.tags.push(v); const x = TAG_EXCL[v]; if (x && e.tags.includes(x)) e.tags.splice(e.tags.indexOf(x), 1); } }
+  saveDay(u, k, e); ui.focus = `[data-act="${act}"][data-v="${v}"]`; ui.flash = 'Saved'; render(false);
+};
+root.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const d = b.dataset;
+  if (d.go) return go(d.go);
+  if (d.scroll) { const el = document.getElementById(d.scroll); if (el) el.scrollIntoView({ behavior: REDUCE ? 'auto' : 'smooth', block: 'start' }); return; }
+  if (d.filter) { ui.filter = d.filter; return render(false); }
+  if (d.week) { ui.tipWeek = +d.week; return render(false); }
+  const u = me();
+  if (d.act && d.act.indexOf('d-') === 0 && u && d.act !== 'd-reveal' && d.act !== 'd-start') return dayAct(d.act, d.v, u);
+  switch (d.act) {
+    case 'logout': DB.session = null; save(); ui.preview = false; route = 'landing'; render(true); break;
+    case 'logout-register': DB.session = null; save(); route = 'register'; render(true); break;
+    case 'demo-mother': seedDemo(); DB.session = 'maria'; save(); route = 'dashboard'; render(true); break;
+    case 'demo-cycle': seedDemo(); DB.session = 'sam'; save(); route = 'dashboard'; render(true); break;
+    case 'demo-family': seedDemo(); DB.session = 'partner'; save(); route = 'family'; render(true); break;
+    case 'toggle-appt': ui.addAppt = !ui.addAppt; ui.resched = null; render(false); break;
+    case 'resched': ui.resched = d.id; render(false); break;
+    case 'resched-cancel': ui.resched = null; render(false); break;
+    case 'del-log': { const i = u.logs.findIndex(l => l.id === d.id); if (i < 0) break; const [rm] = u.logs.splice(i, 1); save(); render(false); toast('Log deleted', () => { u.logs.splice(i, 0, rm); save(); render(false); }); break; }
+    case 'del-appt': { const i = u.appts.findIndex(l => l.id === d.id); if (i < 0) break; const [rm] = u.appts.splice(i, 1); save(); render(false); toast('Appointment deleted', () => { u.appts.splice(i, 0, rm); save(); render(false); }); break; }
+    case 'copy-user': {
+      const done = () => toast('Username copied'), fail = () => toast('Select the username above to copy it');
+      try { navigator.clipboard.writeText(DB.session).then(done, fail); } catch (er) { fail(); }
+      break;
+    }
+    case 'preview-family': go('family'); break;
+    /* calendar and day log */
+    case 'pick-day': ui.sel = d.v; ui.revealed = false; render(false); break;
+    case 'cal-prev': ui.month = new Date(ui.month.getFullYear(), ui.month.getMonth() - 1, 1); render(false); break;
+    case 'cal-next': ui.month = new Date(ui.month.getFullYear(), ui.month.getMonth() + 1, 1); render(false); break;
+    case 'cal-today': ui.sel = today(); ui.month = startOfMonth(today()); render(false); break;
+    case 'log-today': ui.sel = today(); ui.month = startOfMonth(today()); go('calendar'); break;
+    case 'd-reveal': ui.revealed = true; render(false); break;
+    case 'd-start': {
+      if (u.mode !== 'cycle') break;
+      u.starts = uniqSort(u.starts.concat([ui.sel])); u.lastStart = u.starts[u.starts.length - 1];
+      save(); ui.flash = 'Period start saved'; render(false); toast(`Period start saved for ${fmt(ui.sel, MD)}`); break;
+    }
+    case 'use-avg': u.cycle = clampI(d.v, 21, 45); save(); render(false); toast(`Cycle length set to ${u.cycle} days`); break;
+    /* body */
+    case 'body-prev': ui.sel = add(ui.sel, -1); render(false); break;
+    case 'body-next': if (dnum(ui.sel) < dnum(today())) { ui.sel = add(ui.sel, 1); render(false); } break;
+    case 'water+': case 'water-': { const en = dayEntry(u, ui.sel); en.water = clampI(en.water + (d.act === 'water+' ? 1 : -1), 0, 20); saveDay(u, ui.sel, en); ui.focus = `[data-act="${d.act}"]:not(:disabled)`; render(false); break; }
+    /* privacy and data */
+    case 'lock-now': showLock(); break;
+    case 'pin-on': {
+      const p = $('#newPin').value, m = $('#pinMsg');
+      if (!/^\d{4}$/.test(p)) { m.className = 'msg err'; m.textContent = 'The PIN must be exactly 4 digits.'; break; }
+      u.pin = hashPw('pin:' + p); save(); render(false); { const m2 = $('#pinMsg'); if (m2) m2.textContent = 'Lock turned on. It asks for your PIN next time you open G SPOT.'; } break;
+    }
+    case 'pin-off': {
+      const pw = $('#curPw').value, m = $('#pinMsg');
+      if (hashPw(pw) !== u.hash) { m.className = 'msg err'; m.textContent = 'That password is not right.'; break; }
+      u.pin = null; save(); render(false); toast('Lock turned off'); break;
+    }
+    case 'copy-data': {
+      const copy = JSON.parse(JSON.stringify(u)); delete copy.hash; delete copy.pin;
+      const txt = JSON.stringify(copy), box = $('#dataBox'), msg = $('#dataMsg'); box.value = txt;
+      const fallback = () => { box.focus(); box.select(); msg.className = 'msg'; msg.textContent = 'Select and copy the text in the box.'; };
+      try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(() => { msg.className = 'msg'; msg.textContent = 'Copied. Paste it somewhere safe.'; }, fallback); else fallback(); } catch (er) { fallback(); }
+      break;
+    }
+    case 'restore-data': {
+      const txt = $('#dataBox').value.trim(), msg = $('#dataMsg'); let parsed = null;
+      if (!txt) { msg.className = 'msg err'; msg.textContent = 'Paste your backup text into the box first.'; break; }
+      try { parsed = JSON.parse(txt); } catch (er) {}
+      const fields = ['name', 'mode', 'lmp', 'lastStart', 'starts', 'cycle', 'period', 'logs', 'appts', 'days', 'prefs'];
+      let merged = null;
+      if (parsed && typeof parsed === 'object') { merged = Object.assign({}, u); fields.forEach(f => { if (parsed[f] !== undefined) merged[f] = parsed[f]; }); merged = normUser(merged); }
+      if (!merged || u.role === 'family') { msg.className = 'msg err'; msg.textContent = 'That text is not a G SPOT backup for this account.'; break; }
+      merged.hash = u.hash; merged.pin = u.pin; DB.users[DB.session] = merged; save(); route = 'profile'; render(false);
+      { const m2 = $('#dataMsg'); if (m2) m2.textContent = 'Backup restored.'; } break;
+    }
+    case 'erase-days':
+      if (b.getAttribute('data-arm') === '1') { u.days = {}; save(); render(false); toast('Calendar logs erased'); }
+      else { b.setAttribute('data-arm', '1'); b.textContent = 'Tap again to erase'; setTimeout(() => { if (b.isConnected) { b.removeAttribute('data-arm'); b.textContent = 'Erase calendar logs'; } }, 4000); }
+      break;
+    case 'delete-account':
+      if (b.getAttribute('data-arm') === '1') { delete DB.users[DB.session]; Object.keys(DB.users).forEach(n => { if (DB.users[n].follows === DB.session) delete DB.users[n]; }); DB.session = null; save(); route = 'landing'; render(true); }
+      else { b.setAttribute('data-arm', '1'); b.textContent = 'Tap again to delete everything'; setTimeout(() => { if (b.isConnected) { b.removeAttribute('data-arm'); b.textContent = 'Delete my account'; } }, 4000); }
+      break;
+  }
+});
+
+
+/* ---------- lock ---------- */
+const showLock = () => { root.hidden = true; $('#lock').hidden = false; $('#unlockPin').value = ''; $('#lockMsg').textContent = ''; setTimeout(() => $('#unlockPin').focus(), 0); };
+$('#lockForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const u = me(), m = $('#lockMsg');
+  if (u && u.pin && hashPw('pin:' + $('#unlockPin').value) === u.pin) { $('#lock').hidden = true; root.hidden = false; organize(); return; }
+  m.className = 'msg err'; m.textContent = 'That PIN is not right.'; $('#unlockPin').value = ''; $('#unlockPin').focus();
+});
+$('#forgotPin').addEventListener('click', () => { DB.session = null; save(); route = 'login'; $('#lock').hidden = true; root.hidden = false; render(true); toast('Sign in with your password, then turn the lock off in My Profile.'); });
+
+/* ---------- splash ---------- */
+let splashUp = false;
+const runSplash = () => {
+  const sp = $('#splash');
+  if (!sp) return;
+  if (REDUCE) { sp.hidden = true; return; }
+  splashUp = true;
+  let done = false; const timers = [];
+  const finish = () => {
+    if (done) return; done = true; timers.forEach(clearTimeout);
+    sp.classList.add('out'); splashUp = false;
+    setTimeout(organize, 120);
+    setTimeout(() => { sp.hidden = true; }, 700);
+  };
+  ['Preparing your dashboard', 'Arranging your panels', 'Almost ready'].forEach((m, n) => timers.push(setTimeout(() => {
+    const el = $('#spMsg'); el.textContent = m; el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap');
+  }, n * 800)));
+  timers.push(setTimeout(finish, 2500));
+  sp.addEventListener('click', finish);
+  document.addEventListener('keydown', finish, { once: true });
+};
+
+/* ---------- init ---------- */
+DB = load();
+if (!DB) { DB = { users: {}, session: null }; seedDemo(); save(); }
+if (!DB.users.maria || !DB.users.sam) { seedDemo(); save(); }
+if (DB.session && !DB.users[DB.session]) DB.session = null;
+ui.sel = today(); ui.month = startOfMonth(today());
+route = me() ? (me().role === 'family' ? 'family' : 'dashboard') : 'landing';
+splashUp = !REDUCE;
+render(false);
+if (me() && me().pin) showLock();
+runSplash();
+})();
+</script>
+</body></html>
